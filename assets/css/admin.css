@@ -1,0 +1,179 @@
+:root {
+    --light: #f8ede3;
+    --neutral: #dfd3c3;
+    --dark: #d0b8a8;
+    --extradark: #8b7e74;
+  }
+  
+  * {
+    font-family: "Questrial", sans-serif;
+  }
+  
+  .overlay {
+    z-index: 1;
+    background-color: rgba(123, 123, 123, 0.711);
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .overlayyy {
+    z-index: 2;
+    position: relative;
+  }
+  
+  .btn {
+    border-radius: 0 !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .btn:hover {
+    transition: 0.2s ease-out;
+    box-shadow: -5px 5px rgba(57, 57, 57, 0.21);
+  }
+  
+  .bglight {
+    background-color: var(--light) !important;
+  }
+  .bgneutral {
+    background-color: var(--neutral) !important ;
+  }
+  .bgdark {
+    background: var(--dark) !important;
+  }
+  .bgxtradark {
+    background-color: var(--extradark) !important;
+  }
+  .colorxtradark {
+    color: var(--extradark) !important;
+  }
+  .colordark {
+    color: var(--dark) !important;
+  }
+  .colorneutral {
+    color: var(--neutral) !important;
+  }
+  .colorlight {
+    color: var(--light) !important;
+  }
+
+  /* toast */
+  .toast{
+    top:15px;
+    right:15px;
+    z-index: 999 !important;
+  }
+  
+  /* scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px rgb(85, 85, 85); 
+    border-radius: 10px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--dark); 
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--extradark); 
+  }
+  /* admin bg */
+  #adminbg {
+    background-image: url(../img/admin\ bg.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    position: relative;
+  }
+  .transbg {
+    background-color: rgba(230, 230, 230, 0.711);
+  }
+  
+  /* navbar */
+  @media (min-width: 992px) {
+    .navbar {
+        height: 100vh;
+        min-height: 100%;
+      position: relative;
+    }
+    .logoutbtn {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+  .navcontainer {
+    height: -webkit-fill-available;
+  }
+  .nav-link {
+    color: var(--extradark) !important;
+    padding-left: 1rem !important;
+    font-size: 1.2em !important;
+  }
+  .nav-link:hover {
+    color: var(--light) !important;
+    background-color: var(--dark) !important;
+  }
+  
+  .active{
+    color: var(--light) !important;
+    background-color: var(--dark) !important;
+  }
+  
+  /* dashboard */
+  .searchbtn {
+    width: 48px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+  }
+  
+  .searchbtn:hover {
+    background-color: var(--dark) !important;
+    color: var(--light) !important;
+    box-shadow: none;
+    transform: translate(0, 0) !important;
+    transition: 0.2s ease-out;
+  }
+
+  .list-group{
+    --bs-list-group-bg: transparent !important;
+  }
+
+  .dash{
+    position: absolute;
+    color: var(--light);
+    font-size: 35px;
+    top: -25px;
+    left: 15px;
+  }
+  
+  /* manage account page */
+  .passwrap {
+    position: relative;
+  }
+  .eyeicon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+
+  /* manage product page */
+  .imgwrap{
+    max-width:300px;
+    max-height:400px;
+  }
+
+  
