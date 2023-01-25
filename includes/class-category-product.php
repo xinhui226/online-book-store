@@ -3,27 +3,45 @@
 class PivotCatPro{
 
     // display product
-    public static function getProductByCategory($category)
+    public static function getProductByCategory($categoryid)
     {
-        return DB::connect()->select(
-            'SELECT * FROM category_product WHERE category_id = :id',
+        $results = DB::connect()->select(
+            'SELECT * FROM category_product WHERE category_id = :c_id',
             [
-                'id'=>$category
+                'c_id'=>$categoryid
             ],
             true
             );
-    }
 
-    // display product
-    public static function getCategoryByProduct($product)
+        $products=[];
+
+        foreach($results as $result)
+        {
+            $products[] = Products::getProductById($result['product_id']);
+        }
+
+        return $products;
+    }
+    
+    // display category
+    public static function getCategoryByProduct($productid)
     {
-        return DB::connect()->select(
+        $results = DB::connect()->select(
             'SELECT * FROM category_product WHERE product_id = :id',
             [
-                'id'=>$product
+                'id'=>$productid
             ],
             true
             );
+    
+        $category=[];
+    
+        foreach($results as $result)
+        {
+            $category[] = Category::getCategoryById($result['category_id']);
+        }
+    
+        return $category;
     }
 
     //insert data into pivot table
@@ -42,7 +60,7 @@ class PivotCatPro{
     //delete data
     public static function delete($product,$category)
     {
-        return DB::connect()->insert(
+        return DB::connect()->delete(
             'DELETE FROM category_product WHERE product_id=:productid AND category_id=:categoryid',
             [
                 'productid'=>$product,

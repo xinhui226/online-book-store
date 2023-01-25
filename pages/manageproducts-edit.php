@@ -13,7 +13,7 @@ $product = Products::getProductById($_GET['id']);
 $categoryid =[];
 foreach(PivotCatPro::getCategoryByProduct($product['id']) as $index => $pivot )
 {
-    $categoryid[]=$pivot['category_id'];
+    $categoryid[]=$pivot['id'];
 }
 
 if($_SERVER['REQUEST_METHOD']=='POST')
@@ -112,8 +112,6 @@ require dirname(__DIR__)."/parts/adminheader.php";
 <a href="/manageproducts" class="colorlight mb-5"><?= $_SESSION['left-arrow']; ?> Back</a> 
 <h1 class="colorxtradark text-center mb-4">Edit Product "<?=$product['name']?>"</h1>
 
-    <?php require dirname(__DIR__)."/parts/error_box.php" ?>
-
 <form action="<?=$_SERVER['REQUEST_URI'];?>" method="POST" enctype="multipart/form-data">
 
         <div class="mb-3 col-md-6">
@@ -131,6 +129,10 @@ require dirname(__DIR__)."/parts/adminheader.php";
         <input type="checkbox" id="trending" name="trending" <?=($product['trending']==1?'checked':'')?>>
         </div>
 
+    </div> <!--row-->
+    
+    <div class="row">
+
         <div class="mb-3 col-md-3">
             <label for="authorname" class="form-label">Author</label>
             <select class="form-select" id="authorname" name="authorname">
@@ -145,7 +147,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
             </select>
         </div> <!-- mb-3 col-md-3 -->
 
-        <div class="mb-3 col-md-3">
+        <div class="mb-3 col-md-4">
             <label for="category" class="form-label">Category</label>
             <select class="category-multipleselect form-control" name="newcategory[]" id="category" multiple="multiple">
             <?php if(empty(Category::listAllCategory())) :?>
@@ -156,7 +158,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
                     <?php endforeach; ?> <!--end - foreach listAllCategory-->
             <?php endif;?> <!--end endif (empty category)-->
             </select>
-        </div> <!--mb-3 col-md-5-->
+        </div> <!--mb-3 col-md-4-->
 
  </div> <!--row-->
 

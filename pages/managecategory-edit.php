@@ -46,8 +46,6 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
 require dirname(__DIR__)."/parts/adminheader.php";
 ?>
-
-<?php require dirname(__DIR__)."/parts/error_box.php" ?>
 <a href="/managecategory" class="colorlight mt-5"><?= $_SESSION['left-arrow']; ?> Back</a> 
 <div class="row py-5 text-center justify-content-center align-items-center h-75">
   <h1 class="colorxtradark">Edit Category "<?=$category['name'];?>"</h1>

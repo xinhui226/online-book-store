@@ -22,6 +22,10 @@
     z-index: 2;
     position: relative;
   }
+
+  .modaloverlay{
+    background-color: rgba(0, 0, 0, 0.384);
+  }
   
   .btn {
     border-radius: 0 !important;
@@ -106,15 +110,10 @@
         min-height: 100%;
       position: relative;
     }
-    .logoutbtn {
-      position: absolute;
-      bottom: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
   }
   .navcontainer {
     height: -webkit-fill-available;
+    overflow-y: scroll;
   }
   .nav-link {
     color: var(--extradark) !important;
@@ -132,6 +131,7 @@
   }
   
   /* dashboard */
+
   .searchbtn {
     width: 48px !important;
     height: 40px !important;
@@ -173,7 +173,10 @@
   /* manage product page */
   .imgwrap{
     max-width:300px;
-    max-height:400px;
   }
 
-  
+  /* manageorder */
+  .paymentfail{
+    background-color: #d5d5d5 !important;
+    color: #8f8f8f !important;
+  }

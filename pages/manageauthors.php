@@ -55,25 +55,23 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
                 }//end - !$_SESSION['error']
                   break;
        }  //end - switch
-
     } //end - isset($_POST['action'])
 }
             
 require dirname(__DIR__)."/parts/adminheader.php";
 ?>
-<?php require dirname(__DIR__)."/parts/error_box.php" ?>
 <div class="row"> 
     
 <div class="col-12 d-flex justify-content-between">
     <a href="/dashboard" class="colorlight"><?= $_SESSION['left-arrow']; ?> Back</a> 
-        <div class="d-inline-block">
             <form 
             class="d-flex" 
-            method="GET" 
-            action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+            method="POST" 
+            action="<?=$_SERVER['REQUEST_URI']; ?>">
                 <input 
-                class="form-control rounded-5" 
-                type="search" 
+                class="form-control rounded-5"
+                type="search"
+                name="search"
                 placeholder="Search" 
                 aria-label="Search">
                 <button 
@@ -82,14 +80,6 @@ require dirname(__DIR__)."/parts/adminheader.php";
                 <i class="bi bi-search position-absolute translate-middle"></i>
                 </button>
             </form>
-            <select class="form-select colordark mt-2 border-0" style="width:fit-content;">
-                <option selected>Sort By</option>
-                <option value="alpha-asc">Alphabetically A-Z</option>
-                <option value="alpha-desc">Alphabetically Z-A</option>
-                <option value="date-asc">Date, New to Old</option>
-                <option value="date-desc">Date, Old to New</option>
-            </select>
-        </div> <!--d-inline-block-->
     </div> <!--col-12 -->
 
     <div class="col-12">
@@ -124,11 +114,12 @@ require dirname(__DIR__)."/parts/adminheader.php";
         
    </div> <!--col-md-4 mb-5-->
 
-    <?php if(empty(Authors::listAllAuthor())) :?>
-    <?='<h3 class="colorxtradark">No record found</h3>'; ?>
-   <?php else:?>
+        
+   <?php if(isset($_POST['search']) && !empty($_POST['search'])) :?>
+        
     <div class="col-md-9 mx-auto">
-    <table class="table table-bordered table-responsive bglight">
+    <p class="lead text-muted">Result "<?=$_POST['search']?>" :</p>
+        <table class="table table-bordered table-responsive bglight">
     <thead>
         <tr>
             <th scope="col">No.</th>
@@ -138,10 +129,10 @@ require dirname(__DIR__)."/parts/adminheader.php";
         </tr>
     </thead>
     <tbody>
-    <?php foreach(Authors::listAllAuthor() as $index=> $author) : ?>
+        <?php foreach(Authors::search($_POST['search']) as $index=>$author):?>
     <tr>
         <td><?=$index+1?></td>
-        <td><?=$author['name']?></td>
+        <td><a class="colorxtradark text-decoration-none" href="/author_product?id=<?=$author['id']?>"><?=$author['name']?></a></td>
         <td><?=$author['created_at']?></td>
         <td class="d-flex align-items-center justify-content-end">
             <a
@@ -158,6 +149,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
                 <!--deletemodal-->
                 <?php modalHeader('delete',$author['id'],'Author "'.$author['name'].'"'); ?>
                 <h4 class="fw-light">Are you confirm to delete Author "<?=$author['name'];?>" ? (ID : <?=$author['id']?>)</h4>
+                <small class="text-danger">Warning : The books written by the author will be deleted !</small>
                     <input type="hidden" name="authorid" value="<?=$author['id']?>">
                     <input type="hidden" name="author" value="<?=$author['name']?>">
                     <input type="hidden" name="action" value="delete">
@@ -172,7 +164,59 @@ require dirname(__DIR__)."/parts/adminheader.php";
   </tbody>
 </table>
 </div> <!--col-md-9-->
-<?php endif;?> <!--end if(empty(Authors::listAllAuthor())) -->
+
+<?php elseif(!isset($_POST['search'])&&!empty(Authors::listAllAuthor())):?>
+
+    <div class="col-md-9 mx-auto">
+    <table class="table table-bordered table-responsive bglight">
+    <thead>
+        <tr>
+            <th scope="col">No.</th>
+            <th scope="col">Name</th>
+            <th scope="col">Added On</th>
+            <th scope="col" class="text-end">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach(Authors::listAllAuthor() as $index=> $author) : ?>
+    <tr>
+        <td><?=$index+1?></td>
+        <td><a class="colorxtradark" href="/authorproduct?id=<?=$author['id']?>"><?=$author['name']?></a></td>
+        <td><?=$author['created_at']?></td>
+        <td class="d-flex align-items-center justify-content-end">
+            <a
+                href="/manageauthors-edit?id=<?=$author['id']?>"
+                class="btn btn-sm"
+                ><i class="bi bi-pencil-square"></i
+              ></a>
+
+            <?php modalButton('delete',$author['id'],'btn-sm') ?>
+                <form 
+                action="<?= $_SERVER['REQUEST_URI'];?>" 
+                method="POST">
+                
+                <!--deletemodal-->
+                <?php modalHeader('delete',$author['id'],'Author "'.$author['name'].'"'); ?>
+                <h4 class="fw-light">Are you confirm to delete Author "<?=$author['name'];?>" ? (ID : <?=$author['id']?>)</h4>
+                <small class="text-danger">Warning : The books written by the author will be deleted !</small>
+                    <input type="hidden" name="authorid" value="<?=$author['id']?>">
+                    <input type="hidden" name="author" value="<?=$author['name']?>">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('delete_author')?>">
+                <?php modalFooter('delete'); ?>
+                <!--end deletemodal-->
+                </form>
+
+        </td>
+    </tr>
+    <?php endforeach; ?>
+  </tbody>
+</table>
+</div> <!--col-md-9-->
+
+<?php else:?>
+    <h3 class="colorxtradark">No record found</h3>
+<?php endif;?> <!--end if(isset($_POST['search'])&&!empty()) -->
 
 </div> <!--row-->
 

@@ -36,6 +36,17 @@ class Messages{
         // return 'We will get right back to you !';
     }
 
+    //search
+    public static function search($message)
+    {
+        return DB::connect()->select(
+            'SELECT * FROM messages WHERE CONCAT(id,name,email,content,replied,created_at) LIKE "%'.$message.'%"',
+            [],
+            true
+            );
+        
+    }
+
 
     //delete message
     public static function deleteMessage($id)

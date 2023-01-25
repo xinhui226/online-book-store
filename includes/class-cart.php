@@ -88,4 +88,9 @@ class Cart{
        
         }
     }
+
+    public static function clearCart()
+    {
+            unset($_SESSION['cart']);
+    }
 }

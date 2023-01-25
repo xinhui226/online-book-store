@@ -23,6 +23,10 @@
     position: relative;
   }
 
+  .modaloverlay{
+    background-color: rgba(0, 0, 0, 0.384);
+  }
+
   .bgimg{
     background-position: center;
     background-repeat: no-repeat;
@@ -90,7 +94,6 @@
   }
   
   /*  navbar*/
-
   .nav-link {
     color: var(--neutral) !important;
     padding-left: 16px !important;
@@ -133,11 +136,10 @@
      box-shadow: none;
      transform: translate(0,0) !important;
      transition: 0.2s ease-out;
-  } 
+  }
 
   .imgwrap{
     max-width:300px;
-    max-height:400px;
   }
   
   /* contact section */
@@ -202,3 +204,19 @@
     width: 270px;
     object-fit: contain;
   }
+
+  .accordion-button:focus {
+    border-color: none !important;
+    box-shadow: none !important;
+}
+
+.accordion-button{
+  color:black !important ;
+  background-color: white !important;
+}
+
+.paymentfail{
+  background-color: #f4f4f4 !important;
+  color: #7a7a7a !important;
+  text-decoration: line-through !important;
+}

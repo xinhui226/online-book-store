@@ -31,6 +31,17 @@ class Category{
      } 
 
 
+    //search
+    public static function search($category)
+    {
+        return DB::connect()->select(
+            'SELECT * FROM categories WHERE CONCAT(id,name,created_at) LIKE "%'.$category.'%"',
+            [],
+            true
+            );
+        
+    }
+
     //add new category
     public static function addCategory($category)
     {

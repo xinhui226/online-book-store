@@ -84,7 +84,7 @@ require dirname(__DIR__)."/parts/header.php";
         </div>
         </div>
         
-    <a href="/products" class="text-decoration-none colordark d-block text-end">More <i class="bi bi-chevron-right"></i></a>
+    <a href="/products" class="text-decoration-none colordark d-block text-end">All Product <i class="bi bi-chevron-right"></i></a>
 </div> <!--container-->
 <?php endif; ?>
 
@@ -133,7 +133,6 @@ require dirname(__DIR__)."/parts/header.php";
                 <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('contact_form')?>">
                 </form>
             </div> <!-- form -->
-            <?php require dirname(__DIR__)."/parts/error_box.php"?>
             </div> <!--col-lg-7-->
            
 

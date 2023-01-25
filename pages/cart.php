@@ -16,6 +16,7 @@ if(Authentication::isEditor()||Authentication::isAdmin())
  {
       if(isset($_POST['action']))
       {
+        
           switch ($_POST['action']){
 
               case 'delete' :
@@ -74,7 +75,6 @@ if(Authentication::isEditor()||Authentication::isAdmin())
                     exit;
                   }
                   break;
-                break;
               } //end - switch
 
       } 
@@ -110,8 +110,6 @@ require dirname(__DIR__)."/parts/header.php";
 
 ?>
 <body class="bglight">
-  
-<?php require dirname(__DIR__)."/parts/error_box.php"; ?>
 
 <div class="container my-5">
         <a href="/" class="colordark text-decoration-none"><?= $_SESSION['left-arrow']?> Home</a>
@@ -224,10 +222,11 @@ require dirname(__DIR__)."/parts/header.php";
                     <p>Shipping :</p>
                     <p>Free Shipping</p>
                 </div>
-                <div class="d-flex justify-content-between bg-light px-1">
+                <div class="d-flex justify-content-between bg-light px-1 mb-3">
                     <p class="pt-2">Total Amount :</p>
                     <p class="pt-2 fw-semibold">RM <?=Cart::totalAmountOfCart()?></p>
                 </div>
+                <a href="/products" class="colordark">Continue Shopping</a>
             </div> <!--col-lg-6-->
 
 
@@ -268,7 +267,7 @@ require dirname(__DIR__)."/parts/header.php";
                               class="form-control input"
                               id="phonenumber"
                               name="phonenumber"
-                              placeholder="Phone Number"
+                              placeholder="01X-XXXXXXX"
                             />
                           </div>
                           <div class="mb-3">
@@ -329,8 +328,7 @@ require dirname(__DIR__)."/parts/header.php";
                             />
                           </div>
                           </div> <!--row-->
-                          <div class="d-flex justify-content-between align-items-center my-3">
-                          <a href="/products" class="colordark">Continue Shopping</a>
+                          <div class="d-flex justify-content-end align-items-center my-3">
                 <button class="btn neutralbtn colordark">Checkout</button>
             <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('checkout_form')?>">
                </div>

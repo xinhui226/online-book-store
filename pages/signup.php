@@ -65,7 +65,6 @@ require dirname(__DIR__)."/parts/header.php";
 
 ?>
 <body class="bglight">
-<?php require "parts/error_box.php"; ?>
     <div 
     class="container-fluid pe-0 d-flex flex-column align-items-center" 
     style="padding-top:100px;">

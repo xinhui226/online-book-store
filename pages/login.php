@@ -63,7 +63,6 @@ require dirname(__DIR__)."/parts/header.php";
     <div 
     class="container-fluid pe-0 d-flex flex-column align-items-center" 
     style="padding-top:100px;">
- <?php require "parts/error_box.php"; ?>
     <div class="row justify-content-end g-0 mb-1">
       <div class="col-md-4 bg-white d-flex flex-column justify-content-center">
 

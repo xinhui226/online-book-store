@@ -30,8 +30,30 @@ class Products{
         );
     }
 
+    //get product by author
+    public static function getProductByAuthor($author)
+    {
+        return DB::connect()->select(
+            'SELECT p.id,p.name,p.image,p.price,p.description,p.created_at,p.trending,a.id AS authorid,a.name AS authorname FROM products p JOIN authors a ON p.author_id = a.id HAVING authorid=:id',
+            [
+                'id'=>$author
+            ],
+            true
+        );
+    }
 
-    //trending product
+    //search
+    public static function search($product)
+    {
+        return DB::connect()->select(
+            'SELECT p.id,p.name,p.image,p.price,p.description,p.created_at,p.trending,a.id AS authorid,a.name AS authorname FROM products p JOIN authors a ON p.author_id = a.id WHERE p.name LIKE "%'.$product.'%"',
+            [],
+            true
+            );
+        
+    }
+
+    //trending productl
     public static function trendingProducts()
     {
         return DB::connect()->select(

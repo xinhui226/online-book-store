@@ -71,33 +71,27 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
 require dirname(__DIR__)."/parts/adminheader.php";
 ?>
-<?php require dirname(__DIR__)."/parts/error_box.php" ?>
 <div class="row"> 
     
-<div class="d-flex justify-content-between"><a href="/dashboard" class="colorlight"><?= $_SESSION['left-arrow']; ?> Back</a> 
-        <div class="d-inline-block">
-            <form 
+<div class="d-flex justify-content-between">
+    <a href="/dashboard" class="colorlight"><?= $_SESSION['left-arrow']; ?> Back</a> 
+    <form 
             class="d-flex" 
-            method="GET" 
-            action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+            method="POST" 
+            action="<?=$_SERVER['REQUEST_URI']; ?>">
                 <input 
-                class="form-control rounded-5" 
-                type="search" 
+                class="form-control rounded-5"
+                type="search"
+                name="search"
                 placeholder="Search" 
                 aria-label="Search">
                 <button 
                 class="border-0 colordark searchbtn ms-1 position-relative" 
                 type="submit">
-                    <i class="bi bi-search position-absolute translate-middle"></i>
+                <i class="bi bi-search position-absolute translate-middle"></i>
                 </button>
             </form>
-            <select class="form-select colordark mt-2 border-0" style="width:fit-content;">
-                <option>Sort By</option>
-                <option value="date-asc">Date, New to Old</option>
-                <option value="date-desc">Date, Old to New</option>
-            </select>
-        </div> <!--d-inline-block-->
-    </div> <!--d-flex justify-content-between-->
+</div><!--d-flex justify-content-between-->
 
         <h1 class="colorxtradark text-center mb-3">Messages</h1>
 
@@ -112,9 +106,72 @@ require dirname(__DIR__)."/parts/adminheader.php";
            </div> <!--mb-4-->
 
       
-        <?php if(empty(Messages::listAllMessage())) :?>
-        <h3 class="colorxtradark">No record found</h3>
-        <?php else : ?>
+        <?php if(isset($_POST['search'])&&!empty($_POST['search'])) :?>
+            <p class="lead text-muted">Result "<?=$_POST['search']?>" :</p>
+            <?php foreach(Messages::search($_POST['search']) as $message) : ?>
+        <div class="col-lg-3 col-sm-6 h-auto mb-3">
+        <div class="card rounded border-0 colordark h-100">
+            <div class="card-title border-bottom py-2 text-end pe-1">
+            <?php modalButton('delete',$message['id'],'btn-sm') ?>
+                    <form 
+                    action="<?= $_SERVER['REQUEST_URI'];?>" 
+                    method="POST">
+                    <!--deletemodal-->
+                    <?php modalHeader('delete',$message['id'],'Message #id :"'.$message['id'].'"'); ?>
+
+                    <h6 class="fw-light text-start">Are you confirm to delete message from "<?=$message['name'];?>" ?</h6>
+                    <h5 class="text-start">Message : <?=$message['content']?></h5>
+                    <input type="hidden" name="messageid" value="<?=$message['id']?>">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="name" value="<?=$message['name'];?>">
+                    <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('delete_message')?>">
+                    <?php modalFooter('delete'); ?>
+                    <!--end deletemodal-->
+                    </form>
+            <h5 class="text-center">Message #id :<?=$message['id']?></h5>
+            </div> <!--card-tittle-->
+            <div class="card-body">
+                <p>Name : <?=$message['name']?></p>
+                <p>Email : <?=$message['email']?></p>
+                <p>Date : <?=$message['created_at']?></p>
+                <label 
+                for="replied<?=$message['id']?>" 
+                class="form-label">
+                Replied :
+                </label>
+                    <div class="text-center">
+                    <form action="<?=$_SERVER['REQUEST_URI']?>" method="POST">
+                    <select class="form-select form-select-md colordark" id="replied<?=$message['id']?>" name="messagestatus">
+                        <option selected value="<?=$message['replied']?>"><?=$message['replied']?></option>
+                        <option value="<?= ($message['replied']=='Pending'? 'Completed' : 'Pending') ?>">
+                            <?= ($message['replied']=='Pending'? 'Completed' : 'Pending') ?>
+                        </option>
+                    </select>
+                        <input type="hidden" name="messageid" value="<?=$message['id']?>">
+                        <input type="hidden" name="action" value="update">
+                        <button type="submit" class="btn btn-sm bgneutral colorxtradark mt-2" name="action" value="update">Save</button>
+                        <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('edit_message')?>">
+                    </form>
+            </div> <!--card-body-->
+        </div> <!--card-->
+
+        <?php modalButton('view',$message['id'],'btn-md bglight colorxtradark','View') ?>
+                <!--viewmodal-->
+                <?php modalHeader('view',$message['id'],'Message #id :'.$message['id']); ?>
+
+                <p>Name : <?=$message['name']?></p>
+                <p>Email : <?=$message['email']?></p>
+                <p>Message : <?=$message['content']?></p>
+                <p>Status : <?=$message['replied']?></p>
+                <p>Date : <?=$message['created_at']?></p>
+
+                <?php modalFooter('view'); ?>
+                <!--end viewmodal-->
+        </div> <!--col-md-3-->
+                        </div>
+        <?php endforeach; ?>
+
+        <?php elseif(!isset($_POST['search'])&&!empty(Messages::listAllMessage())) : ?>
         <?php foreach(Messages::listAllMessage() as $message) : ?>
         <div class="col-lg-3 col-sm-6 h-auto mb-3">
         <div class="card rounded border-0 colordark h-100">
@@ -177,6 +234,9 @@ require dirname(__DIR__)."/parts/adminheader.php";
         </div> <!--col-md-3-->
                         </div>
         <?php endforeach; ?>
+        
+<?php else :?>
+    <h3 class="colorxtradark">No record found</h3>
         <?php endif; ?> <!--end if(empty(Messages::listAllMessage()))-->
 
 </div> <!--row-->

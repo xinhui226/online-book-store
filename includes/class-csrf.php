@@ -12,11 +12,11 @@ class CSRF{
     }
 
     //verify session token and form token
-    public static function verifyToken($formToken,$form)
+    public static function verifyToken($formToken,$form = '')
     {
-            if(isset($_SESSION[$form.'_csrf_token'])&&$formToken==$_SESSION[$form.'_csrf_token'])
-                return true;
-
+        if(isset($_SESSION[$form . '_csrf_token']) && $_SESSION[$form . '_csrf_token'] === $formToken) {
+            return true;
+        }
         return false;
     }
 

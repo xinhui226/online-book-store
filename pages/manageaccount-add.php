@@ -54,8 +54,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
 require dirname(__DIR__)."/parts/adminheader.php";
 ?>
-<a href="/manageaccount" class="colorlight mb-4"><?= $_SESSION['left-arrow']; ?> Back</a> 
-<?php require dirname(__DIR__)."/parts/error_box.php";?>
+<a href="/manageaccount" class="colorlight mb-4"><?= $_SESSION['left-arrow']; ?> Back</a>
 <h1 class="colorxtradark text-center">Add New Account</h1>
 
 <form action="<?= $_SERVER['REQUEST_URI']?>" method="POST">

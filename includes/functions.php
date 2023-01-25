@@ -23,7 +23,7 @@ function modalButton($action,$target,$class='',$keyword='')
 //modal header
 function modalHeader($action,$target,$modaltitle,$class=""){
 
-  echo '<div class="modal fade '.$class.'" id="'.$action.$target.'" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
+  echo '<div class="modal fade modaloverlay '.$class.'" id="'.$action.$target.'" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-md-down">
               <div class="modal-content">
               <div class="modal-header">
@@ -46,3 +46,37 @@ function modalFooter($action,$additionalbtn=""){
             </div>
             </div>';
   }
+
+//API function
+function callAPI($api_url='',$method='GET',$formdata=[],$headers=[])
+    {
+        $curl = curl_init();
+
+        $curl_props= [
+            CURLOPT_URL=>$api_url,
+            CURLOPT_RETURNTRANSFER=>true,
+            CURLOPT_FAILONERROR=>true,
+            CURLOPT_CUSTOMREQUEST=>$method
+        ];
+
+        if(!empty($formdata)){
+            $curl_props[CURLOPT_POSTFIELDS] = json_encode($formdata);
+        }
+
+    if ( !empty( $headers ) ) {
+        $curl_props[ CURLOPT_HTTPHEADER ] = $headers;
+    }
+
+        curl_setopt_array($curl,$curl_props);
+
+        $response = curl_exec($curl);
+
+        $error = curl_error($curl);
+
+        curl_close($curl);
+
+        if($error)
+            return false;
+
+        return json_decode($response);
+    }

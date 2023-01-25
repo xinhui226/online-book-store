@@ -31,6 +31,18 @@ class Authors{
     }
 
 
+    //search
+    public static function search($author)
+    {
+        return DB::connect()->select(
+            'SELECT * FROM authors WHERE CONCAT(id,name,created_at) LIKE "%'.$author.'%"',
+            [],
+            true
+            );
+        
+    }
+
+
     //add new author
     public static function addAuthor($name)
     {

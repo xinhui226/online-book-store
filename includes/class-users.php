@@ -5,20 +5,11 @@ class Users{
     //get all users
     public static function getAllUsers($limit=null)
     {
-        if($limit)
-        {
             return DB::connect()->select(
-            'SELECT * FROM users ORDER BY id DESC LIMIT '.$limit,
+            'SELECT * FROM users ORDER BY id DESC'.($limit?' LIMIT '.$limit:''),
             [],
             true
-            );
-        }
-
-        return DB::connect()->select(
-            'SELECT * FROM users ORDER BY id DESC',
-            [],
-            true
-            );        
+            );      
     }
 
     //quantity of users account
@@ -37,6 +28,17 @@ class Users{
                 'id'=>$id
             ]
         );
+    }
+
+    //search
+    public static function search($user)
+    {
+        return DB::connect()->select(
+            'SELECT * FROM users WHERE CONCAT(id,username,email,role,created_at) LIKE "%'.$user.'%"',
+            [],
+            true
+            );
+        
     }
 
 

@@ -17,6 +17,8 @@ require "includes/class-csrf.php";
 require "includes/class-users.php";
 require "includes/class-cart.php";
 require "includes/class-shippingdetails.php";
+require "includes/class-order.php";
+require "includes/class-checkout.php";
 
 
 $path = trim ($_SERVER['REQUEST_URI'],'/');
@@ -87,6 +89,12 @@ switch($path){
         break;
     case 'manageauthors-edit' :
         require "pages/manageauthors-edit.php";
+        break;
+    case 'author_product' :
+        require "pages/author_product.php";
+        break;
+    case 'category_product' :
+        require "pages/category_product.php";
         break;
     
         default:

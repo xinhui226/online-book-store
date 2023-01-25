@@ -61,8 +61,6 @@ require dirname(__DIR__)."/parts/adminheader.php";
 <a href="/manageproducts" class="colorlight mb-4"><?= $_SESSION['left-arrow']; ?> Back</a> 
 <h1 class="colorxtradark text-center mb-4">Add New Product</h1>
 
-     <?php require dirname(__DIR__)."/parts/error_box.php" ?> 
-
 <form action="<?=$_SERVER['REQUEST_URI']?>" method="POST" enctype="multipart/form-data">
     <div class="mb-3 col-md-8">
         <label for="bookname" class="form-label">Book Name</label>
@@ -78,7 +76,10 @@ require dirname(__DIR__)."/parts/adminheader.php";
         <label for="trending" class="form-label">Trending</label>
         <input type="checkbox" id="trending" name="trending">
         </div>
-   
+    </div><!--row-->
+        
+    <div class="row">
+
         <div class="mb-3 col-md-3">
             <label for="authorname" class="form-label">Author</label>
             <select class="form-select" id="authorname" name="authorname">
@@ -93,7 +94,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
             </select>
     </div><!--mb-3 col-md-3-->
 
-        <div class="mb-3 col-md-5">
+        <div class="mb-3 col-md-4">
             <label for="category" class="form-label">Category</label>
             <select class="category-multipleselect form-control" name="category[]" id="category" multiple="multiple">
             <?php if(empty(Category::listAllCategory())) :?>
@@ -104,7 +105,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
                     <?php endforeach; ?> <!--end - foreach listAllCategory-->
             <?php endif;?> <!--end endif (empty category)-->
             </select>
-        </div> <!--mb-3 col-md-5-->
+        </div> <!--mb-3 col-md-4-->
 
  </div> <!--row-->
  

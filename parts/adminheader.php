@@ -30,6 +30,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style> @import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap'); </style>
   </head>
+  <?php require dirname(__DIR__)."/parts/error_box.php"; ?>
   <body id="adminbg">
     <div class="overlay"></div>
   <div class="container-fluid overlayyy p-0">
@@ -67,13 +68,13 @@
             <a class="nav-link" href="/managemessages"><i class="bi bi-envelope-fill"></i> Messages</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/manageorders"><i class="bi bi-bag-fill"></i> Orders</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="/manageaccount"><i class="bi bi-people-fill"></i> Manage Account</a>
           </li>
-          <?php endif;?>
-          <li class="nav-item logoutbtn">
+          <li class="nav-item">
+            <a class="nav-link" href="/manageorders"><i class="bi bi-bag-fill"></i> Orders</a>
+            </li>
+            <?php endif;?>
+          <li class="nav-item mt-5 d-flex justify-content-center">
             <a href="/logout" class="btn bgdark colorlight fs-6">Log Out</a>
           </li>
         </ul>

@@ -27,5 +27,4 @@
     crossorigin="anonymous">
     <style> @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap'); </style>
   </head>
-
- 
+  <?php require dirname(__DIR__)."/parts/error_box.php"; ?>
