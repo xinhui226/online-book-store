@@ -7,76 +7,45 @@ if(Authentication::isEditor()||Authentication::isAdmin())
  }
 
  if(Authentication::isLoggedIn()){
- CSRF::generateToken('delete_cart_item');
- CSRF::generateToken('increase_cart_item');
- CSRF::generateToken('decrease_cart_item');
  CSRF::generateToken('checkout_form');
 
  if($_SERVER['REQUEST_METHOD']=='POST')
  {
       if(isset($_POST['action']))
       {
-        
-          switch ($_POST['action']){
+          if ($_POST['action']=='delete'){
 
-              case 'delete' :
                 $_SESSION['error']=FormValidation::validation(
                   $_POST,
                   [
                     'productid'=>'required',
-                    'name'=>'required',
-                    'csrf_token'=>'delete_cart_token'
+                    'name'=>'required'
                   ]
                 );
                 if(empty($_SESSION['error']))
                   {
                     Cart::updateCart($_POST['action'],$_POST['productid']);
-
-                    CSRF::removeToken('delete_cart_item');
 
                     $_SESSION['message'] = 'Successfully remove Product "'.$_POST['name'].'" from your cart !';
                     header('Location: /cart');
                     exit;
                   }
-                  break;
-              case 'increase' :
+        }
+          elseif($_POST['action']=='increase'||$_POST['action']=='decrease'){  
                 $_SESSION['error']=FormValidation::validation(
                   $_POST,
                   [
-                    'productid'=>'required',
-                    'csrf_token'=>'increase_cart_token'
+                    'productid'=>'required'
                   ]
                 );
                 if(empty($_SESSION['error']))
                   {
                     Cart::updateCart($_POST['action'],$_POST['productid']);
 
-                    CSRF::removeToken('increase_cart_item');
-
                     header('Location: /cart');
                     exit;
                   }
-                  break;
-              case 'decrease' :
-                $_SESSION['error']=FormValidation::validation(
-                  $_POST,
-                  [
-                    'productid'=>'required',
-                    'csrf_token'=>'decrease_cart_token'
-                  ]
-                );
-                if(empty($_SESSION['error']))
-                  {
-                    Cart::updateCart($_POST['action'],$_POST['productid']);
-
-                    CSRF::removeToken('decrease_cart_item');
-
-                    header('Location: /cart');
-                    exit;
-                  }
-                  break;
-              } //end - switch
-
+              }
       } 
       else{
 
@@ -85,15 +54,13 @@ if(Authentication::isEditor()||Authentication::isAdmin())
             $_SESSION['error']=FormValidation::validation(
               $_POST,
               [
-                'csrf_token'=>'add_cart_token'
+                'name'=>'required'
               ]
             );
 
             if(empty($_SESSION['error']))
             {
               Cart::addToCart($_POST['productid']);
-
-              CSRF::removeToken('add_cart_item');
 
               $_SESSION['message'] = 'Successfully added Product "'.$_POST['name'].'" to cart !';
               header('Location: /products');
@@ -181,7 +148,6 @@ require dirname(__DIR__)."/parts/header.php";
                 <input type="hidden" name="action" value="delete">
                 <input type="hidden" name="productid" value="<?=$product['id']?>">
                 <input type="hidden" name="name" value="<?=$product['name']?>">
-                <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('delete_cart_item')?>">
 
                 <?php modalFooter('delete'); ?>
                 <!--end deletemodal-->
@@ -198,7 +164,6 @@ require dirname(__DIR__)."/parts/header.php";
                     <button type="submit" class="btn"><i class="bi bi-dash-lg"></i></button>
                     <input type="hidden" name="action" value="decrease">
                     <input type="hidden" name="productid" value="<?=$product['id']?>">
-                    <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('decrease_cart_item')?>">
                   </form>
                   
                   <p><?=$product['quantity']?></p>
@@ -208,7 +173,6 @@ require dirname(__DIR__)."/parts/header.php";
                     <button type="submit" class="btn"><i class="bi bi-plus-lg"></i></button>
                     <input type="hidden" name="action" value="increase">
                     <input type="hidden" name="productid" value="<?=$product['id']?>">
-                    <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('increase_cart_item')?>">
                   </form>
                   </div> <!--quantitywrap-->
 
@@ -257,18 +221,22 @@ require dirname(__DIR__)."/parts/header.php";
                             />
                           </div>
                           <div class="mb-3">
-                            <label 
-                            for="phonenumber" 
-                            class="form-label">
-                                Phone Number
-                            </label>
-                            <input
-                              type="text"
-                              class="form-control input"
-                              id="phonenumber"
-                              name="phonenumber"
-                              placeholder="01X-XXXXXXX"
-                            />
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <div class="input-group">
+                            <input 
+                            type="text" 
+                            class="form-control" 
+                            placeholder="012"
+                            id="phone"
+                            name="phoneno"
+                            aria-label="phoneno">
+                            <span class="input-group-text">-</span>
+                            <input type="text" 
+                            class="form-control"
+                            name="phonenumber"
+                            placeholder="3456789"
+                            aria-label="phonenumber">
+                            </div>
                           </div>
                           <div class="mb-3">
                             <label 

@@ -22,7 +22,7 @@ class Checkout
             ]
           );
     }
-
+    
     public static function updateTransactionId($transactionid,$orderid)
     {
         return DB::connect()->update(
@@ -31,7 +31,28 @@ class Checkout
                 'transactionid'=>$transactionid,
                 'id'=>$orderid
             ]
-            );
+        );
     }
- 
+    
+    public static function checkPaymentDetails($transaction_id)
+    {
+        $details = callAPI(
+            BILLPLZ_API_URL.'v3/bills/'.$transaction_id.'/transactions',
+            'GET',
+            [],
+            [
+                'Content-Type: application/json',
+                'Authorization: Basic '. base64_encode(BILLPLZ_API_KEY.':')
+            ]
+        )->transactions[0];
+
+        $result = $details;
+
+        if($details->status!='completed'){
+            $result->completed_at = '---';
+        }
+
+        return $result;
+    }
+
 }

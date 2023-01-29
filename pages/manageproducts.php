@@ -22,7 +22,6 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
       if(empty($_SESSION['error']))
       {
-          unlink("./assets/uploads/".$_POST['image']);
           Products::deleteProduct($_POST['productid']);
 
           CSRF::removeToken('delete_product');
@@ -42,22 +41,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
 
    <div class="d-flex justify-content-between">
    <a href="/dashboard" class="colorlight"><?= $_SESSION['left-arrow']; ?> Back</a> 
-   <form 
-            class="d-flex" 
-            method="POST" 
-            action="<?=$_SERVER['REQUEST_URI']; ?>">
-                <input 
-                class="form-control rounded-5"
-                type="search"
-                name="search"
-                placeholder="Search" 
-                aria-label="Search">
-                <button 
-                class="border-0 colordark searchbtn ms-1 position-relative" 
-                type="submit">
-                <i class="bi bi-search position-absolute translate-middle"></i>
-                </button>
-            </form>
+   <?php require dirname(__DIR__)."/parts/searchbox.php"?>
 </div> <!--d-flex justify-content-between-->
 
     <div class="col-12 mb-4">
@@ -73,26 +57,31 @@ require dirname(__DIR__)."/parts/adminheader.php";
         <div class="col-md-10">
         <p class="lead text-muted">Result "<?=$_POST['search']?>" :</p>
     <h6 class="colorxtradark"><i class="bi bi-fire"></i>= Trending</h6>
+    <?php if(!empty(Products::search($_POST['search']))) :?>
     <table class="table table-bordered table-responsive bglight">
-  <thead>
-    <tr>
-        <th scope="col">No.</th>
-        <th scope="col">Product</th>
-        <th scope="col">Price (RM)</th>
-        <th scope="col">Image</th>
-        <th scope="col" class="text-end">Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach(Products::search($_POST['search']) as $index=> $product) : ?>
+        <thead>
+            <tr>
+                <th scope="col">No.</th>
+                <th scope="col">Product</th>
+                <th scope="col">Price (RM)</th>
+                <th scope="col">Image</th>
+                <th scope="col" class="text-end">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach(Products::search($_POST['search']) as $index=> $product) : ?>
 
-        <?php require dirname(__DIR__)."/parts/foreach_tablerow_product.php";?>
-        
-    <?php endforeach; ?>
-    </tbody>
-    </table>
-</div> <!--col-md-9-->
-    <?php elseif(!isset($_POST['search'])&&!empty(Products::listAllProducts())) :?>
+                <?php require dirname(__DIR__)."/parts/foreach_tablerow_product.php";?>
+                
+            <?php endforeach; ?>
+            </tbody>
+            </table>
+        <?php else :?>
+        <h3 class="colorxtradark">No record found</h3>
+        <?php endif?> <!--end - if(!empty(Products::search()))-->
+    </div> <!--col-md-9-->
+
+    <?php elseif(!empty(Products::listAllProducts())) :?>
     <div class="col-md-10">
     <h6 class="colorxtradark"><i class="bi bi-fire"></i>= Trending</h6>
     <table class="table table-bordered table-responsive bglight">
@@ -113,8 +102,6 @@ require dirname(__DIR__)."/parts/adminheader.php";
     </table>
 </div> <!--col-md-9-->
 
-<?php else :?>
-    <h3 class="colorxtradark">No record found</h3>
 <?php endif;?> <!--end if(empty(Products::listAllProducts()))-->
 </div> <!--row-->
 

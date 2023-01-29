@@ -95,7 +95,6 @@
   
   /*  navbar*/
   .nav-link {
-    color: var(--neutral) !important;
     padding-left: 16px !important;
     padding-right: 16px !important;
   }
@@ -105,8 +104,12 @@
     background-color: var(--dark) !important;
   }
 
-  .active{
-    color:#4c626f !important;
+  .navbar-toggler{
+    border: none !important;
+  }
+
+  .navbar-toggler:focus{
+    box-shadow: none !important;
   }
   
   /* index page */
@@ -218,5 +221,4 @@
 .paymentfail{
   background-color: #f4f4f4 !important;
   color: #7a7a7a !important;
-  text-decoration: line-through !important;
 }

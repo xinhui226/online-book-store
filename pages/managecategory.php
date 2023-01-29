@@ -85,22 +85,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
  
  <div class="d-flex justify-content-between">
             <a href="/dashboard" class="colorlight"><?= $_SESSION['left-arrow']; ?> Back</a> 
-            <form 
-            class="d-flex" 
-            method="POST" 
-            action="<?=$_SERVER['REQUEST_URI']; ?>">
-                <input 
-                class="form-control rounded-5"
-                type="search"
-                name="search"
-                placeholder="Search" 
-                aria-label="Search">
-                <button 
-                class="border-0 colordark searchbtn ms-1 position-relative" 
-                type="submit">
-                <i class="bi bi-search position-absolute translate-middle"></i>
-                </button>
-            </form>
+            <?php require dirname(__DIR__)."/parts/searchbox.php"?>
 </div><!--d-flex justify-content-between-->        
 
     <div class="col-12">
@@ -139,53 +124,57 @@ require dirname(__DIR__)."/parts/adminheader.php";
 
             <div class="col-md-9 mx-auto">
             <p class="lead text-muted">Result "<?=$_POST['search']?>" :</p>
+            <?php if(!empty(Category::search($_POST['search']))):?>
             <table class="table table-bordered table-responsive bglight">
-          <thead>
-            <tr>
-                <th scope="col">No.</th>
-                <th scope="col">Category</th>
-                <th scope="col">Created_at</th>
-                <th scope="col" class="text-end">Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php foreach(Category::search($_POST['search']) as $index=> $category) : ?>
-            <tr>
-                <td><?=$index+1?></td>
-                <td><a class="colorxtradark text-decoration-none" href="/category_product?id=<?=$category['id']?>"><?=$category['name']?></a></td>
-                <td><?=$category['created_at']?></td>
-                <td class="d-flex align-items-center justify-content-end">
-                <a
-                        href="/managecategory-edit?id=<?=$category['id']?>"
-                        class="btn btn-sm"
-                        ><i class="bi bi-pencil-square"></i
-                      ></a>
-        
-                    <?php modalButton('delete',$category['id'],'btn-sm') ?>
-                        <form 
-                        action="<?= $_SERVER['REQUEST_URI'];?>" 
-                        method="POST">
-                        <!--deletemodal-->
-                        <?php modalHeader('delete',$category['id'],'Category "'.$category['name'].'"'); ?>
-        
-                        <h4 class="fw-light">Are you confirm to delete Category "<?=$category['name'];?>" ? (ID : <?=$category['id']?>)</h4>
-                        <input type="hidden" name="categoryid" value="<?=$category['id']?>">
-                        <input type="hidden" name="action" value="delete">
-                        <input type="hidden" name="category" value="<?=$category['name']?>">
-                        <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('delete_category')?>">
-        
-                        <?php modalFooter('delete'); ?>
-                        <!--end deletemodal-->
-                        </form>
-        
-                </td>
+            <thead>
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Created_at</th>
+                    <th scope="col" class="text-end">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach(Category::search($_POST['search']) as $index=> $category) : ?>
+                <tr>
+                    <td><?=$index+1?></td>
+                    <td><a class="colorxtradark text-decoration-none" href="/category_product?id=<?=$category['id']?>"><?=$category['name']?></a></td>
+                    <td><?=$category['created_at']?></td>
+                    <td class="d-flex align-items-center justify-content-end">
+                    <a
+                            href="/managecategory-edit?id=<?=$category['id']?>"
+                            class="btn btn-sm"
+                            ><i class="bi bi-pencil-square"></i
+                        ></a>
+            
+                        <?php modalButton('delete',$category['id'],'btn-sm') ?>
+                            <form 
+                            action="<?= $_SERVER['REQUEST_URI'];?>" 
+                            method="POST">
+                            <!--deletemodal-->
+                            <?php modalHeader('delete',$category['id'],'Category "'.$category['name'].'"'); ?>
+            
+                            <h4 class="fw-light">Are you confirm to delete Category "<?=$category['name'];?>" ? (ID : <?=$category['id']?>)</h4>
+                            <input type="hidden" name="categoryid" value="<?=$category['id']?>">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="category" value="<?=$category['name']?>">
+                            <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('delete_category')?>">
+            
+                            <?php modalFooter('delete'); ?>
+                            <!--end deletemodal-->
+                            </form>
+            
+                    </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
             </table>
+            <?php else :?>
+            <h3 class="colorxtradark">No record found</h3>
+            <?php endif?> <!--if(!empty(Category::search())):?>-->
         </div> <!--col-md-9-->
 
-   <?php elseif(!isset($_POST['search'])&&!empty(Category::listAllCategory())):?>
+   <?php elseif(!empty(Category::listAllCategory())):?>
     <div class="col-md-9 mx-auto">
     <table class="table table-bordered table-responsive bglight">
   <thead>
@@ -233,8 +222,6 @@ require dirname(__DIR__)."/parts/adminheader.php";
     </table>
 </div> <!--col-md-9-->
 
-<?php else :?>
-    <h3 class="colorxtradark">No record found</h3>
 <?php endif;?> <!--end if(isset($_POST['search']&&!empty(Category::search())))-->
 </div> <!--row-->
 

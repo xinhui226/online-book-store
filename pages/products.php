@@ -1,13 +1,5 @@
 <?php 
 
-if(Authentication::whoCanAccess('editor'))
-{   
-    header('Location: /dashboard');
-    exit;
-}
-
-CSRF::generateToken('add_cart_item');
-
 $checkcategory=[];
 if(isset($_GET['category']))
 {
@@ -31,22 +23,7 @@ require dirname(__DIR__)."/parts/usernavbar.php"
 
     <div class="d-flex align-items-center justify-content-between my-4 px-4">
     <a href="/" class="colordark"><?= $_SESSION['left-arrow']; ?> Home</a>
-    <form 
-            class="d-flex" 
-            method="POST" 
-            action="<?=$_SERVER['REQUEST_URI']; ?>">
-                <input 
-                class="form-control rounded-5"
-                type="search"
-                name="search"
-                placeholder="Search" 
-                aria-label="Search">
-                <button 
-                class="border-0 colordark searchbtn ms-1 position-relative" 
-                type="submit">
-                <i class="bi bi-search position-absolute translate-middle"></i>
-                </button>
-            </form>
+    <?php require dirname(__DIR__)."/parts/searchbox.php"?>
         
       </div> <!--d-flex justify-content-between-->
 
@@ -70,7 +47,7 @@ require dirname(__DIR__)."/parts/usernavbar.php"
                name="category[]" 
                value="<?=$category['id']?>" 
                id="checkbox<?=$category['id']?>" 
-               <?php if(in_array($category['id'],$checkcategory)) echo 'checked'?>
+               <?=in_array($category['id'],$checkcategory)?'checked':''?>
                >
                 <label 
                 class="form-check-label stretched-link colordark" 
@@ -85,50 +62,90 @@ require dirname(__DIR__)."/parts/usernavbar.php"
         </div>
       </div> <!--col-lg-3-->
 
+      
          <!-- product -->
          <div class="col-lg-9">
           <h3 class="fw-semibold colordark mb-3">Product</h3>
 
-          <?php if(isset($_POST['search'])&&!empty($_POST['search'])):?>
-            <p class="lead text-muted">Result "<?=$_POST['search']?>" :</p>
-            <p class="colordark"><i class="bi bi-fire"></i>= Trending</p>
-            <div class="row">
-                        <?php if(!empty(Products::search($_POST['search']))) :?>
-                        <?php foreach(Products::search($_POST['search']) as $product) : ?>
-                        <?php require dirname(__DIR__)."/parts/productpage_display.php"; ?>
-                        <?php endforeach; ?> <!-- endforeach Products::search() as $product) -->  
-                        <?php else:?>
-                          <h3 class="colordark">No record found</h3>
-                        <?php endif?>
 
-          <?php elseif(!isset($_POST['search'])&&!empty(Products::listAllProducts())) :?>
-            <p class="colordark"><i class="bi bi-fire"></i>= Trending</p>
-            <div class="row">
-                    <?php if(isset($_GET['category'])):?>
-                        <?php foreach($checkcategory as $categoryid) :?>
-                         <h4 class="colorneutral"><?=ucfirst(Category::getCategoryById($categoryid)['name']) ?> :</h4>
-                        <?php if(!empty(PivotCatPro::getProductByCategory($categoryid))) :?>
-                        <?php foreach(PivotCatPro::getProductByCategory($categoryid) as $product) :?>
-                        <?php require dirname(__DIR__)."/parts/productpage_display.php"; ?>
-                        <?php endforeach;?>
-                        <?php else:?>
-                        <h6 class="colordark">No record found</h6>
-                        <?php endif;?>
-                        <?php endforeach;?>
-                         <!--end - foreach(PivotCatPro::getProductByCategory($checkcategory))-->
-                    <?php else:?>
-                        <?php foreach(Products::listAllProducts() as $product) : ?>
-                        <?php require dirname(__DIR__)."/parts/productpage_display.php"; ?>
-                        <?php endforeach; ?> <!-- endforeach Products::listAllProducts() as $product) -->  
-                    <?php endif;?>
+          <!-- if(isset($_GET['category'])) -->
+            <?php if(isset($_GET['category'])): ?>
 
-          <?php else:?>
-              <h3 class="colordark">No record found</h3>
+                                  <?php if(isset($_POST['search'])&&!empty($_POST['search'])) :?>
+                                  <p class="lead text-muted">Result "<?=$_POST['search']?>" :</p>
+                                  <small class="colordark"><i class="bi bi-fire"></i>= Trending</small>
+                                  <div class="row">
 
-          <?php endif; ?> <!-- endif isset($_POST['search'])&& !empty(Products::search()) -->
-         
+                                                        <?php foreach($checkcategory as $categoryid) {?>
+                                                        <h4 class="colorneutral"><?=ucfirst(Category::getCategoryById($categoryid)['name']) ?> :</h4>
+                                                        <?php
+                                                              foreach(Products::userSearch($_POST['search']) as $product){
+                                                              foreach(PivotCatPro::getProductByCategory($categoryid) as $categoryproduct) 
+                                                                {
+                                                                  if($product['id']==$categoryproduct['id']) require dirname(__DIR__)."/parts/productpage_display.php";
+                                                                }
+                                                              } 
+
+                                                        } // end - foreach($checkcategory as $categoryid)
+                                                        ?>
+
+                                  <?php  else :?>
+                                  <small class="colordark"><i class="bi bi-fire"></i>= Trending</small>
+                                  <div class="row">
+
+                                                        <?php foreach($checkcategory as $categoryid) {?>
+                                                        <h4 class="colorneutral"><?=ucfirst(Category::getCategoryById($categoryid)['name']) ?> :</h4>
+
+                                                        <?php if(!empty(PivotCatPro::inStockProductByCategory($categoryid))) {
+                                                                  foreach(PivotCatPro::inStockProductByCategory($categoryid) as $product) 
+                                                                  {
+                                                                    require dirname(__DIR__)."/parts/productpage_display.php";
+                                                                  }
+                                                              } else
+                                                                  { 
+                                                                    echo '<h6 class="colordark">No record found</h6>';
+                                                                  }
+                                                        } // end - foreach($checkcategory as $categoryid)
+
+                                  endif ?> <!--end - if(isset($_POST['search'])&&!empty($_POST['search']))-->
+
+
+            <!-- else : - if(isset($_GET['category']))-->              
+            <?php else :?> 
+
+                              <?php if(isset($_POST['search'])&&!empty($_POST['search'])) :?>
+                              <p class="lead text-muted">Result "<?=$_POST['search']?>" :</p>
+                              <small class="colordark"><i class="bi bi-fire"></i>= Trending</small>
+                              <div class="row">
+
+                                                <?php if(!empty(Products::userSearch($_POST['search']))) 
+                                                {
+                                                  foreach(Products::userSearch($_POST['search']) as $product){ 
+                                                    require dirname(__DIR__)."/parts/productpage_display.php";
+                                                  } 
+                                                } 
+                                                else{ 
+                                                  echo '<h3 class="colordark">No record found</h3>';
+                                                }?> 
+                                                <!--end -if (!empty(Products::userSearch()))-->
+
+                              
+                              <?php  elseif(!empty(Products::listInStockProducts())) :?>
+                              <small class="colordark"><i class="bi bi-fire"></i>= Trending</small>
+                              <div class="row">
+
+                                                  <?php foreach(Products::listInStockProducts() as $product) { 
+                                                  require dirname(__DIR__)."/parts/productpage_display.php"; 
+                                                  } ?>
+                              
+                              <?php endif ?> <!--end - if(isset($_POST['search'])&&!empty($_POST['search']))-->
             
+
+            <!-- end - if(isset($_GET['category']))-->
+            <?php endif; ?> 
+
           </div> <!--row-->
+
           <div class="col-12 text-center pt-4">
             <p class="text-muted fst-italic">Stay tuned for many exciting new products...</p>
           </div>  

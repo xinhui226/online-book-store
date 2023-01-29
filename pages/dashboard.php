@@ -19,7 +19,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
     <div class="col-lg-3 col-md-3 bg-light btn rounded-4 p-4 mb-4 position-relative">
         <a href="/managecategory" class="text-decoration-none colordark">
         <i class="bi bi-tag-fill dash"></i>
-            <h4>Total Categories<i class="bi bi-chevron-right fs-6"></i></h4>
+            <h4>Categories<i class="bi bi-chevron-right fs-6"></i></h4>
             <h4>(<?=Category::totalCategories()['quantity']?>)</h4>
         </a>
     </div> <!--col-lg-3 col-md-3-->
@@ -27,7 +27,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
     <div class="col-lg-3 col-md-3 bg-light btn rounded-4 p-4 mb-4 position-relative">
         <a href="/manageauthors" class="text-decoration-none colordark">
         <i class="bi bi-pen-fill dash"></i>
-            <h4>Total Authors<i class="bi bi-chevron-right fs-6"></i></h4>
+            <h4>Authors<i class="bi bi-chevron-right fs-6"></i></h4>
             <h4>(<?=Authors::totalAuthors()['quantity']?>)</h4>
         </a>
     </div> <!--col-lg-3 col-md-3-->
@@ -35,7 +35,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
     <div class="col-lg-3 col-md-3 btn bg-light rounded-4 p-4 mb-4 position-relative">
         <a href="/manageproducts" class="text-decoration-none colordark">
         <i class="bi bi-book-fill dash"></i>
-                <h4>Total Products<i class="bi bi-chevron-right fs-6"></i></h4>
+                <h4>Products<i class="bi bi-chevron-right fs-6"></i></h4>
                 <h4>(<?=Products::totalProducts()['quantity']?>)</h4>
             </a>
     </div> <!--col-lg-3 col-md-3-->
@@ -49,15 +49,15 @@ require dirname(__DIR__)."/parts/adminheader.php";
     <div class="col-lg-3 col-md-3 btn bg-light rounded-4 p-4 mb-4 position-relative">
         <a href="/managemessages" class="text-decoration-none colordark">
             <i class="bi bi-envelope-fill dash"></i>
-            <h4>New Messages<i class="bi bi-chevron-right fs-6"></i></h4>
-            <h4>(Pending) (<?=Messages::newMessage()['quantity']?>)</h4>
+            <h4>Messages<i class="bi bi-chevron-right fs-6"></i></h4>
+            <h4>(<?=Messages::allMessage()['quantity']?>)</h4>
         </a>
     </div> <!--col-lg-3 col-md-3-->
 
     <div class="col-lg-3 col-md-3 btn bg-light rounded-4 p-4 mb-4 position-relative">
         <a href="/manageaccount" class="text-decoration-none colordark">
             <i class="bi bi-people-fill dash"></i>
-            <h4>Total Users Account<i class="bi bi-chevron-right fs-6"></i></h4>
+            <h4>Users Account<i class="bi bi-chevron-right fs-6"></i></h4>
             <h4>(<?=Users::totalUserAccount()['quantity']?>)</h4>
         </a>
     </div> <!--col-lg-3 col-md-3-->
@@ -65,7 +65,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
     <div class="col-lg-3 col-md-3 btn bg-light rounded-4 p-4 mb-4 position-relative">
         <a href="/manageorders" class="text-decoration-none colordark">
             <i class="bi bi-receipt-cutoff dash"></i>
-            <h4>Total Sales<i class="bi bi-chevron-right fs-6"></i></h4>
+            <h4>Sales<i class="bi bi-chevron-right fs-6"></i></h4>
             <h4>RM (<?=Order::countSales()['sales']?>)</h4>
         </a>
     </div> <!--col-lg-3 col-md-3-->
@@ -123,6 +123,8 @@ require dirname(__DIR__)."/parts/adminheader.php";
         <?php endif ?> <!--end - if empty(Users::getAllUsers());-->
     </div>
 
-<?php endif; ?> <!--endif(Authentication::whoCanAccess(Admin))-->
-<?php
+<?php 
+
+endif; //end - if(Authentication::whoCanAccess(Admin))
+
 require dirname(__DIR__)."/parts/footer.php";

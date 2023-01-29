@@ -76,7 +76,7 @@ function callAPI($api_url='',$method='GET',$formdata=[],$headers=[])
         curl_close($curl);
 
         if($error)
-            return false;
+            die ('API not working');
 
         return json_decode($response);
     }

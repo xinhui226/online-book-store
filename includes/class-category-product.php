@@ -5,6 +5,7 @@ class PivotCatPro{
     // display product
     public static function getProductByCategory($categoryid)
     {
+
         $results = DB::connect()->select(
             'SELECT * FROM category_product WHERE category_id = :c_id',
             [
@@ -18,6 +19,30 @@ class PivotCatPro{
         foreach($results as $result)
         {
             $products[] = Products::getProductById($result['product_id']);
+        }
+
+        return $products;
+    }
+
+    //display in stock product
+    public static function inStockProductByCategory($categoryid)
+    {
+        $results = DB::connect()->select(
+            'SELECT * FROM category_product WHERE category_id = :c_id',
+            [
+                'c_id'=>$categoryid
+            ],
+            true
+            );
+
+        $products=[];
+
+        foreach(Products::listInStockProducts() as $instockprod)
+        {
+            foreach($results as $result)
+            {
+                if($instockprod['id']==$result['product_id']) $products[] = Products::getProductById($result['product_id']);
+            } 
         }
 
         return $products;

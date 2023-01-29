@@ -50,30 +50,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
 
    <h1 class="colorxtradark text-center">Manage Account</h1>
    
-   <div class="col-sm-12 d-flex justify-content-between">
-       <select class="form-select colordark ms-3" style="width:fit-content;" id="role">
-        <option selected>--Select Role--</option>
-        <option value="admin">Admin</option> <!-- <=($user['role']=='...' ? 'selected' : '') -->
-        <option value="editor">Editor</option> <!-- <=($user['role']=='...' ? 'selected' : '') -->
-        <option value="user">User</option> <!-- <=($user['role']=='...' ? 'selected' : '') -->
-    </select>
-    <form 
-            class="d-flex" 
-            method="POST" 
-            action="<?=$_SERVER['REQUEST_URI']; ?>">
-                <input 
-                class="form-control rounded-5"
-                type="search"
-                name="search"
-                placeholder="Search" 
-                aria-label="Search">
-                <button 
-                class="border-0 colordark searchbtn ms-1 position-relative" 
-                type="submit">
-                <i class="bi bi-search position-absolute translate-middle"></i>
-                </button>
-            </form>
-</div>
+    <?php require dirname(__DIR__)."/parts/searchbox.php"?>
         
         <div class="col-10 mt-3 text-end">
         <a href="/manageaccount-add" class="btn bgdark colorlight">Add New Account</a>
@@ -82,69 +59,75 @@ require dirname(__DIR__)."/parts/adminheader.php";
     <?php if(isset($_POST['search']) && !empty($_POST['search'])) :?>
     <div class="col-md-10 mt-3">
     <p class="lead text-muted">Result "<?=$_POST['search']?>" :</p>
+    <?php if(!empty(Users::search($_POST['search']))):?>
     <table class="table table-bordered table-responsive bglight">
-  <thead>
-    <tr>
-        <th scope="col">No.</th>
-        <th scope="col">Username</th>
-        <th scope="col">Email</th>
-        <th scope="col">Role</th>
-        <th scope="col" class="text-end">Action</th>
-    </tr>
+    <thead>
+        <tr>
+            <th scope="col">No.</th>
+            <th scope="col">Username</th>
+            <th scope="col">Email</th>
+            <th scope="col">Role</th>
+            <th scope="col" class="text-end">Action</th>
+        </tr>
     </thead>
     <tbody>
     <?php foreach(Users::search($_POST['search']) as $index => $user) : ?>
-    <tr>
-        <td><?=$index+1?></td>
-        <td><?=$user['username']?></td>
-        <td><?=$user['email']?></td>
-        <td><?=$user['role']?></td>
-        <td class="d-flex align-items-center justify-content-end">
+        <tr>
+            <td><?=$index+1?></td>
+            <td><?=$user['username'].($user['id']==$_SESSION['user']['id']?' <i class="bi bi-person-circle"></i>':'')?></td>
+            <td><?=$user['email']?></td>
+            <td><?=$user['role']?></td>
+            <td class="d-flex align-items-center justify-content-end">
 
-            <!-- viewmodal-->
-            <?php modalButton('view',$user['id'],'btn-sm') ?>
-            <?php modalHeader('view',$user['id'],'User "'.$user['username'].'"'); ?>
+                <!-- viewmodal-->
+                <?php modalButton('view',$user['id'],'btn-sm') ?>
+                <?php modalHeader('view',$user['id'],'User "'.$user['username'].'"'); ?>
 
-                <p>ID : <?=$user['id'];?></p>
-                <p>Username : <?=$user['username'];?></p>
-                <p>Email : <?=$user['email'];?></p>
-                <p>Role : <?=$user['role'];?></p>
+                    <p>ID : <?=$user['id'];?></p>
+                    <p>Username : <?=$user['username'];?></p>
+                    <p>Email : <?=$user['email'];?></p>
+                    <p>Role : <?=$user['role'];?></p>
 
-            <?php modalFooter('view'); ?>
-            <!--end viewmodal-->
-            
-            <a href="/manageaccount-edit?id=<?=$user['id']?>" class="btn btn-sm">
-            <i class="bi bi-pencil-square"></i>
-            </a>
+                <?php modalFooter('view'); ?>
+                <!--end viewmodal-->
+                <?php if($user['role']!=='admin'):?>
 
-            <!--deletemodal-->
-            <?php modalButton('delete',$user['id'],'btn-sm') ?>
+                <a href="/manageaccount-edit?id=<?=$user['id']?>" class="btn btn-sm">
+                <i class="bi bi-pencil-square"></i>
+                </a>
+                
+                <!--deletemodal-->
+                <?php modalButton('delete',$user['id'],'btn-sm') ?>
+                <?php endif; ?><!-- end - if($user['role']!='admin)-->
                 <form 
                 action="<?= $_SERVER['REQUEST_URI'];?>" 
                 method="POST">
-                <?php modalHeader('delete',$user['id'],$user['username']); ?>
-                <h4 class="fw-light my-2">Are you confirm to delete user "<?=$user['username'];?>" ?</h4>
-                <input type="hidden" name="userid" value="<?=$user['id']?>">
-                <input type="hidden" name="user" value="<?=$user['username']?>">
-                <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('delete_account')?>">
+                    <?php modalHeader('delete',$user['id'],$user['username']); ?>
+                    <h4 class="fw-light my-2">Are you confirm to delete user "<?=$user['username'];?>" ?</h4>
+                    <input type="hidden" name="userid" value="<?=$user['id']?>">
+                    <input type="hidden" name="user" value="<?=$user['username']?>">
+                    <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('delete_account')?>">
+                    
+                    <p>ID : <?=$user['id'];?></p>
+                    <p>Username : <?=$user['username'];?></p>
+                    <p>Email : <?=$user['email'];?></p>
+                    <p>Role : <?=$user['role'];?></p>
                 
-                <p>ID : <?=$user['id'];?></p>
-                <p>Username : <?=$user['username'];?></p>
-                <p>Email : <?=$user['email'];?></p>
-                <p>Role : <?=$user['role'];?></p>
-              
-                <?php modalFooter('delete'); ?>
-            </form>
-            <!--end deletemodal-->
+                    <?php modalFooter('delete'); ?>
+                </form>
+                <!--end deletemodal-->
 
-        </td>
-        </tr>
+            </td>
+            </tr>
         <?php endforeach; ?>
     </tbody>
     </table>
+    <?php else:?>
+    <h3 class="colorxtradark">No record found</h3>
+    <?php endif ?> <!--end - if(!empty(Users::search()))-->
 </div> <!--col-md-10-->
 
-    <?php elseif(!isset($_POST['search'])&&!empty(Users::getAllUsers())) :?>
+    <?php elseif(!empty(Users::getAllUsers())) :?>
     <div class="col-md-10 mt-3">
     <table class="table table-bordered table-responsive bglight">
   <thead>
@@ -160,7 +143,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
     <?php foreach(Users::getAllUsers() as $index => $user) : ?>
     <tr>
         <td><?=$index+1?></td>
-        <td><?=$user['username']?></td>
+        <td><?=$user['username'].($user['id']==$_SESSION['user']['id']?' <i class="bi bi-person-circle"></i>':'')?></td>
         <td><?=$user['email']?></td>
         <td><?=$user['role']?></td>
         <td class="d-flex align-items-center justify-content-end">
@@ -176,6 +159,8 @@ require dirname(__DIR__)."/parts/adminheader.php";
 
             <?php modalFooter('view'); ?>
             <!--end viewmodal-->
+
+            <?php if($user['role']!=='admin'):?>
             
             <a href="/manageaccount-edit?id=<?=$user['id']?>" class="btn btn-sm">
             <i class="bi bi-pencil-square"></i>
@@ -183,6 +168,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
 
             <!--deletemodal-->
             <?php modalButton('delete',$user['id'],'btn-sm') ?>
+            <?php endif; ?> <!-- end - if($user['role']!='admin)-->
                 <form 
                 action="<?= $_SERVER['REQUEST_URI'];?>" 
                 method="POST">
@@ -207,8 +193,6 @@ require dirname(__DIR__)."/parts/adminheader.php";
     </tbody>
     </table>
 </div> <!--col-md-10-->
-<?php else:?>
-<h3 class="colorxtradark">No record found</h3>
 <?php endif;?> <!--end if(empty(Users::getAllUsers()))-->
 
 

@@ -64,22 +64,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
     
 <div class="col-12 d-flex justify-content-between">
     <a href="/dashboard" class="colorlight"><?= $_SESSION['left-arrow']; ?> Back</a> 
-            <form 
-            class="d-flex" 
-            method="POST" 
-            action="<?=$_SERVER['REQUEST_URI']; ?>">
-                <input 
-                class="form-control rounded-5"
-                type="search"
-                name="search"
-                placeholder="Search" 
-                aria-label="Search">
-                <button 
-                class="border-0 colordark searchbtn ms-1 position-relative" 
-                type="submit">
-                <i class="bi bi-search position-absolute translate-middle"></i>
-                </button>
-            </form>
+            <?php require dirname(__DIR__)."/parts/searchbox.php"?>
     </div> <!--col-12 -->
 
     <div class="col-12">
@@ -119,53 +104,56 @@ require dirname(__DIR__)."/parts/adminheader.php";
         
     <div class="col-md-9 mx-auto">
     <p class="lead text-muted">Result "<?=$_POST['search']?>" :</p>
+        <?php if(!empty(Authors::search($_POST['search']))):?>
         <table class="table table-bordered table-responsive bglight">
-    <thead>
-        <tr>
-            <th scope="col">No.</th>
-            <th scope="col">Name</th>
-            <th scope="col">Added On</th>
-            <th scope="col" class="text-end">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach(Authors::search($_POST['search']) as $index=>$author):?>
-    <tr>
-        <td><?=$index+1?></td>
-        <td><a class="colorxtradark text-decoration-none" href="/author_product?id=<?=$author['id']?>"><?=$author['name']?></a></td>
-        <td><?=$author['created_at']?></td>
-        <td class="d-flex align-items-center justify-content-end">
-            <a
-                href="/manageauthors-edit?id=<?=$author['id']?>"
-                class="btn btn-sm"
-                ><i class="bi bi-pencil-square"></i
-              ></a>
+        <thead>
+            <tr>
+                <th scope="col">No.</th>
+                <th scope="col">Name</th>
+                <th scope="col">Added On</th>
+                <th scope="col" class="text-end">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach(Authors::search($_POST['search']) as $index=>$author):?>
+                <tr>
+                    <td><?=$index+1?></td>
+                    <td><a class="colorxtradark text-decoration-none" href="/author_product?id=<?=$author['id']?>"><?=$author['name']?></a></td>
+                    <td><?=$author['created_at']?></td>
+                    <td class="d-flex align-items-center justify-content-end">
+                        <a
+                            href="/manageauthors-edit?id=<?=$author['id']?>"
+                            class="btn btn-sm"
+                            ><i class="bi bi-pencil-square"></i
+                        ></a>
 
-            <?php modalButton('delete',$author['id'],'btn-sm') ?>
-                <form 
-                action="<?= $_SERVER['REQUEST_URI'];?>" 
-                method="POST">
-                
-                <!--deletemodal-->
-                <?php modalHeader('delete',$author['id'],'Author "'.$author['name'].'"'); ?>
-                <h4 class="fw-light">Are you confirm to delete Author "<?=$author['name'];?>" ? (ID : <?=$author['id']?>)</h4>
-                <small class="text-danger">Warning : The books written by the author will be deleted !</small>
-                    <input type="hidden" name="authorid" value="<?=$author['id']?>">
-                    <input type="hidden" name="author" value="<?=$author['name']?>">
-                    <input type="hidden" name="action" value="delete">
-                    <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('delete_author')?>">
-                <?php modalFooter('delete'); ?>
-                <!--end deletemodal-->
-                </form>
-
-        </td>
-    </tr>
-    <?php endforeach; ?>
-  </tbody>
-</table>
+                        <?php modalButton('delete',$author['id'],'btn-sm') ?>
+                            <form 
+                            action="<?= $_SERVER['REQUEST_URI'];?>" 
+                            method="POST">
+                            
+                            <!--deletemodal-->
+                            <?php modalHeader('delete',$author['id'],'Author "'.$author['name'].'"'); ?>
+                            <h4 class="fw-light">Are you confirm to delete Author "<?=$author['name'];?>" ? (ID : <?=$author['id']?>)</h4>
+                            <small class="text-danger">Warning : The books written by the author will be deleted !</small>
+                                <input type="hidden" name="authorid" value="<?=$author['id']?>">
+                                <input type="hidden" name="author" value="<?=$author['name']?>">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('delete_author')?>">
+                            <?php modalFooter('delete'); ?>
+                            <!--end deletemodal-->
+                            </form>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+        </tbody>
+        </table>
+      <?php else:?>
+      <h3 class="colorxtradark">No record found</h3>
+    <?php endif?> <!--if(!empty(Authors::search()))-->
 </div> <!--col-md-9-->
 
-<?php elseif(!isset($_POST['search'])&&!empty(Authors::listAllAuthor())):?>
+<?php elseif(!empty(Authors::listAllAuthor())):?>
 
     <div class="col-md-9 mx-auto">
     <table class="table table-bordered table-responsive bglight">
@@ -214,8 +202,6 @@ require dirname(__DIR__)."/parts/adminheader.php";
 </table>
 </div> <!--col-md-9-->
 
-<?php else:?>
-    <h3 class="colorxtradark">No record found</h3>
 <?php endif;?> <!--end if(isset($_POST['search'])&&!empty()) -->
 
 </div> <!--row-->

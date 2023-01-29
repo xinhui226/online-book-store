@@ -24,7 +24,8 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
           'state'=>'required',
           'city'=>'required',
           'postcode'=>'numeric',
-          'phonenumber'=>'phone',
+          'phoneno'=>'phone',
+          'phonenumber'=>'numeric',
           'csrf_token'=>'checkout_form_csrf_token'
           ]
         );
@@ -41,7 +42,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
    
         Shipment::insert(
             $_POST['name'],
-            $_POST['phonenumber'],
+            $_POST['phoneno'].'-'.$_POST['phonenumber'],
             $_POST['address'],
             $_POST['postcode'],
             $_POST['state'],
@@ -60,7 +61,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
         
 
-        if($api)
+        if($api!='API not working')
         {
             if(isset($api->id))
             {
@@ -74,7 +75,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
             }//end - if isset($api->url)
         }
         else{
-            $_SESSION['error']= 'API not working';
+            $_SESSION['error']=$api;
         }//end-if($api)
     } //end - if !empty($_SESSION['error'])
     

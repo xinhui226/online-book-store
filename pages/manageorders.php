@@ -44,29 +44,15 @@ require dirname(__DIR__)."/parts/adminheader.php";
 <div class="d-flex justify-content-between">
     <a href="/dashboard" class="colorlight"><?= $_SESSION['left-arrow']; ?> Back</a> 
 
-            <select class="form-select colordark mt-2 border-0" style="width:fit-content;">
-                <option>Sort By</option>
-                <option value="date-asc">Date, New to Old</option>
-                <option value="date-desc">Date, Old to New</option>
-            </select>
 </div> <!--d-flex justify-content-between-->
 
-        <h1 class="colorxtradark text-center">Orders</h1>
-    
-            <div class="mb-4">
-                    <label for="status" class="colorxtradark">Status</label>
-                    <select class="form-select colordark" style="width:fit-content;" id="status">
-                        <option>All</option>
-                        <option value="pending">Pending</option>
-                        <option value="completed">Completed</option>
-                    </select>
-            </div> <!--mb-4-->
+        <h1 class="colorxtradark text-center mb-5">Orders</h1>
 
             <?php if(!empty(Order::listAllOrder())) :?>
             <div class="row g-2">
         <?php foreach(Order::listAllOrder() as $order) : ?>
 
-        <div class="col-md-4 col-sm-6 ">
+        <div class="col-md-4 col-sm-6 mb-3">
         <div class="card rounded border-0 h-100 <?=$order['payment_status']=='Failed'?'paymentfail' :'colordark'?>">
             <div class="card-title border-bottom py-2 text-end pe-1">
                <h5 class="text-center">Order #id :<?=$order['id']?></h4>
@@ -74,7 +60,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
 
             <div class="card-body">
                 <p>
-                    User ID : <?=$order['user_id']?>
+                    Username : <?=Users::getUserById($order['user_id'])['username']?>
                     <?php modalButton('viewuser',$order['id'],'colordark','<i class="bi bi-eye"></i>') ?>
                 </p>
 
@@ -83,15 +69,19 @@ require dirname(__DIR__)."/parts/adminheader.php";
                  $details = Shipment::getShippingDetails($order['id']) ;?>
                 
                 <h6>Order id : <?=$order['id']?></h6>
+                <p>User id : <?=$order['user_id']?></p>
                 <p>Name : <?=$details['name']?></p>
                 <p>Phone No. : <?=$details['phone']?></p>
                 <p>Address : <?=$details['address'].'<br>'.$details['postcode'].'<br>'.$details['state'].'<br>'.$details['city']?></p>
-
+                
                 <?php modalFooter('view'); ?>
+                <!--end - view user detail modal -->
 
                 <p>Amount : RM<?=$order['total_amount']?></p>
                 <p>Placed on : <?=$order['created_at']?></p>
                 <p <?=$order['payment_status']=='Failed'?'class="fw-semibold"' :''?>>Payment Status : <?=$order['payment_status']?></p>
+                <p>Payment Method : <?=Checkout::checkPaymentDetails($order['transaction_id'])->payment_channel?></p>
+                <p>Paid at : <?=Checkout::checkPaymentDetails($order['transaction_id'])->completed_at?></p>
                 <label 
                 for="deliver<?=$order['id']?>" 
                 class="form-label">
@@ -113,7 +103,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
 
             <?php else: ?>
                 <input class="form-control" disabled>
-                    <?php endif;?> <!--end - if($order['payment_status']!='Failed')-->
+            <?php endif;?> <!--end - if($order['payment_status']!='Failed')-->
             </div> <!--card-body -->
 
         <?php modalButton('view',$order['id'],'btn-md bgdark colorlight','View') ?>

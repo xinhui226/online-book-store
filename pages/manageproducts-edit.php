@@ -26,7 +26,6 @@ if($_SERVER['REQUEST_METHOD']=='POST')
  $_SESSION['error'] = FormValidation::validation(
    $_POST,
        [
-           'bookname'=>'text',
            'price'=>'numeric',
            'authorname'=>'required',
            'description'=>'required',
@@ -47,10 +46,6 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
  if(empty($_SESSION['error'])){
 
-   if($updateNewImage){
-        unlink("./assets/uploads/".$product['image']);
-   } // end - if $updateNewImage
-
         Products::updateProduct(
         $product['id'],
         $name,
@@ -58,7 +53,8 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         $author,
         $description,
         ($updateNewImage? Products::imageUpload($_FILES['new_image']):null),
-        (!empty($_POST['trending'])? 1:0)
+        (!empty($_POST['trending'])? 1:0),
+        (!empty($_POST['available'])? 1:0)
     );
 
     $newcat =[];
@@ -118,22 +114,22 @@ require dirname(__DIR__)."/parts/adminheader.php";
             <label for="productname" class="form-label">Book Name</label>
             <input type="text" class="form-control" id="productname" name="bookname" value="<?=$product['name']?>">
         </div>
+        
+        <div class="col-md-4">
+            <input type="checkbox" id="trending" name="trending" <?=($product['trending']==1?'checked':'')?>>
+            <label for="trending" class="form-label">Trending</label>
+            <br>
+            <input type="checkbox" id="available" name="available" <?=($product['available']==1?'checked':'')?>>
+            <label for="available" class="form-label">In stock</label>
+        </div>
+        
+        <div class="mb-3 col-md-3">
+            <label for="productprice" class="form-label">Price</label>
+            <input type="text" class="form-control" id="productprice" name="price" value="<?=$product['price']?>">
+        </div>
+        
         <div class="row">
             <div class="mb-3 col-md-3">
-                <label for="productprice" class="form-label">Price</label>
-                <input type="text" class="form-control" id="productprice" name="price" value="<?=$product['price']?>">
-            </div>
-       
-        <div class="col-md-4 d-flex align-items-center">
-        <label for="trending" class="form-label">Trending</label>
-        <input type="checkbox" id="trending" name="trending" <?=($product['trending']==1?'checked':'')?>>
-        </div>
-
-    </div> <!--row-->
-    
-    <div class="row">
-
-        <div class="mb-3 col-md-3">
             <label for="authorname" class="form-label">Author</label>
             <select class="form-select" id="authorname" name="authorname">
             <?php if(empty(Authors::listAllAuthor())) :?>
@@ -160,7 +156,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
             </select>
         </div> <!--mb-3 col-md-4-->
 
- </div> <!--row-->
+    </div><!--row-->
 
         <div class="mb-3 col-md-6">
             <label for="productdesc" class="form-label">Description</label>

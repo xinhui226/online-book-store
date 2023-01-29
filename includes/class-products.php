@@ -7,7 +7,17 @@ class Products{
     {
         //fetchall
         return DB::connect()->select(
-            'SELECT p.id,p.name,p.image,p.price,p.description,p.created_at,p.trending,a.id AS authorid,a.name AS authorname FROM products p JOIN authors a ON p.author_id = a.id ORDER BY id DESC',
+            'SELECT p.id,p.name,p.image,p.price,p.description,p.created_at,p.trending,p.available,a.id AS authorid,a.name AS authorname FROM products p JOIN authors a ON p.author_id = a.id ORDER BY id DESC',
+            [],
+            true);
+    }
+
+    // get in stock product
+    public static function listInStockProducts()
+    {
+        //fetchall
+        return DB::connect()->select(
+            'SELECT p.id,p.name,p.image,p.price,p.description,p.created_at,p.trending,p.available,a.id AS authorid,a.name AS authorname FROM products p JOIN authors a ON p.author_id = a.id HAVING available=1 ORDER BY id DESC',
             [],
             true);
     }
@@ -23,7 +33,7 @@ class Products{
     public static function getProductById($id)
     {
         return DB::connect()->select(
-            'SELECT p.id,p.name,p.image,p.price,p.description,p.created_at,p.trending,a.id AS authorid,a.name AS authorname FROM products p JOIN authors a ON p.author_id = a.id HAVING id=:id',
+            'SELECT p.id,p.name,p.image,p.price,p.description,p.created_at,p.trending,p.available,a.id AS authorid,a.name AS authorname FROM products p JOIN authors a ON p.author_id = a.id HAVING id=:id',
             [
                 'id'=>$id
             ]
@@ -34,7 +44,7 @@ class Products{
     public static function getProductByAuthor($author)
     {
         return DB::connect()->select(
-            'SELECT p.id,p.name,p.image,p.price,p.description,p.created_at,p.trending,a.id AS authorid,a.name AS authorname FROM products p JOIN authors a ON p.author_id = a.id HAVING authorid=:id',
+            'SELECT p.id,p.name,p.image,p.price,p.description,p.created_at,p.trending,p.available,a.id AS authorid,a.name AS authorname FROM products p JOIN authors a ON p.author_id = a.id HAVING authorid=:id',
             [
                 'id'=>$author
             ],
@@ -46,7 +56,18 @@ class Products{
     public static function search($product)
     {
         return DB::connect()->select(
-            'SELECT p.id,p.name,p.image,p.price,p.description,p.created_at,p.trending,a.id AS authorid,a.name AS authorname FROM products p JOIN authors a ON p.author_id = a.id WHERE p.name LIKE "%'.$product.'%"',
+            'SELECT p.id,p.name,p.image,p.price,p.description,p.created_at,p.trending,p.available,a.id AS authorid,a.name AS authorname FROM products p JOIN authors a ON p.author_id = a.id WHERE p.name LIKE "%'.$product.'%"',
+            [],
+            true
+            );
+        
+    }
+
+    //user page search
+    public static function userSearch($product)
+    {
+        return DB::connect()->select(
+            'SELECT p.id,p.name,p.image,p.price,p.description,p.created_at,p.trending,p.available,a.id AS authorid,a.name AS authorname FROM products p JOIN authors a ON p.author_id = a.id WHERE p.available=1 AND p.name LIKE "%'.$product.'%"',
             [],
             true
             );
@@ -57,7 +78,7 @@ class Products{
     public static function trendingProducts()
     {
         return DB::connect()->select(
-            'SELECT p.id,p.name,p.image,p.price,p.description,p.created_at,p.trending,a.id AS authorid,a.name AS authorname FROM products p JOIN authors a ON p.author_id = a.id HAVING trending=1 ORDER BY name',
+            'SELECT p.id,p.name,p.image,p.price,p.description,p.created_at,p.trending,p.available,a.id AS authorid,a.name AS authorname FROM products p JOIN authors a ON p.author_id = a.id HAVING trending=1 AND available=1 ORDER BY name',
             [],
             true);
     }
@@ -98,7 +119,7 @@ class Products{
     }
 
     //update product
-    public static function updateProduct($id,$name,$price,$author,$description,$image=null,$trending)
+    public static function updateProduct($id,$name,$price,$author,$description,$image=null,$trending,$available)
     {
         $params = [
             'id'=>$id,
@@ -106,7 +127,8 @@ class Products{
             'price'=>$price,
             'author'=>$author,
             'description'=>$description,
-            'trending'=>$trending
+            'trending'=>$trending,
+            'available'=>$available
         ];
 
         if($image)
@@ -115,7 +137,7 @@ class Products{
         }
 
        return DB::connect()->update(
-            'UPDATE products SET name=:name,price=:price,author_id=:author,'.($image?'image=:image,':'').'description=:description,trending=:trending WHERE id=:id',
+            'UPDATE products SET name=:name,price=:price,author_id=:author,'.($image?'image=:image,':'').'description=:description,trending=:trending,available=:available WHERE id=:id',
             $params
         );
 

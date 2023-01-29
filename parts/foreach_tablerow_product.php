@@ -1,6 +1,6 @@
    <tr>
         <td><?=$index+1?></td>
-        <td><?=$product['name'].($product['trending']==1?'<i class="bi bi-fire colorxtradark"></i>':'')?></td>
+        <td><?=$product['name'].($product['trending']==1?'<i class="bi bi-fire colorxtradark"></i>':'').($product['available']==1?'<p class="colorxtradark">(In Stock)</p>':'')?></td>
         <td><?=$product['price']?></td>
         <td><img src="./assets/uploads/<?=$product['image']?>" alt="<?=$product['name']?>" class="d-block mx-auto" style="max-width:150px;max-height:180px;"></td>
         <td class="d-flex align-items-center justify-content-end">
@@ -21,7 +21,7 @@
             </a>
 
             <!--deletemodal-->
-            <?php modalButton('delete',$product['id'],'btn-sm') ?>
+            <?php if(!isset($_GET['id'])) modalButton('delete',$product['id'],'btn-sm') ?>
                 <form 
                 action="<?= $_SERVER['REQUEST_URI'];?>" 
                 method="POST">

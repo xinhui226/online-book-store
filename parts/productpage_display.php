@@ -14,13 +14,14 @@
                       <form 
                           action="/cart" 
                           method="POST">
+                          <?php if(!Authentication::isEditor()&&!Authentication::isAdmin()):?>
                           <button class="btn darkbtn text-white me-1">Add to cart</button>
+                          <?php endif?>
                           <input 
                           type="hidden" 
                           name="productid" 
                           value="<?=$product['id'];?>">
                           <input type="hidden" name="name" value="<?=$product['name']?>">
-                          <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('add_cart_item')?>">
                     </form>
 
                     <?php modalButton('view',$product['id'],'neutralbtn text-white','View') ?>
@@ -34,12 +35,11 @@
           method="POST">
           <input type="hidden" name="productid" value="<?=$product['id']?>">
           <input type="hidden" name="name" value="<?=$product['name']?>">
-          <input type="hidden" name="csrf_token" value="<?=CSRF::getToken('add_cart_item')?>">
           <?php modalHeader('view',$product['id'],$product['name'],'modal-xl'); ?>
           
             <?php require dirname(__DIR__)."/parts/view_product.php"; ?>
 
-            <?php modalFooter('view','<button type="submit" class="btn bgdark">Add to Cart</button>'); ?>
+            <?php modalFooter('view',!Authentication::isEditor()&&!Authentication::isAdmin()?'<button type="submit" class="btn bgdark">Add to Cart</button>':''); ?>
           </form>
       <!--end viewmodal-->
     </div><!--<div class="col-lg-6">-->

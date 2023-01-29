@@ -1,12 +1,6 @@
 <?php
 
-if(Authentication::whoCanAccess('editor'))
- {
-  header('Location: /dashboard');
-  exit;
- }
-
- CSRF::generateToken('contact_form');
+CSRF::generateToken('contact_form');
 
 if($_SERVER['REQUEST_METHOD']=='POST'){
 
@@ -40,7 +34,7 @@ require dirname(__DIR__)."/parts/header.php";
 ?>
 
 <body>
-<?php require dirname(__DIR__)."/parts/usernavbar.php"; ?>
+<?php require dirname(__DIR__)."/parts/usernavbar.php";?>
 <header class="py-4">
     <div class="container py-5">
         <div class="row position-relative justify-content-md-end">

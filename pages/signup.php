@@ -1,6 +1,6 @@
 <?php
 
-  if(Authentication::whoCanAccess('editor'))
+  if(Authentication::isEditor()||Authentication::isAdmin())
   {
     header('Location: /dashboard');
     exit;

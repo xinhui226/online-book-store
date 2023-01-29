@@ -81,7 +81,7 @@ class FormValidation
 
                 case 'phone' :
                     if(empty($data[$key])) $error.= 'The field "'.$key.'" is empty<br>';
-                    elseif (!preg_match('/^[0-9]{3}-[0-9]{7,8}$/', $data[$key])) $error .= 'Invalid phone number format. <br>';  
+                    elseif (!preg_match('/[0][1][0-9]/', $data[$key])) $error .= 'Invalid phone number format. <br>';  
                     break;
 
                 case 'password_check' :
@@ -167,26 +167,10 @@ class FormValidation
                     if(!CSRF::verifyToken($data[$key],'delete_account')) die ('Nice Try');
                     break;
 
-                case 'add_cart_token' :
-                    if(!CSRF::verifyToken($data[$key],'add_cart_item')) die ('Nice Try');
-                    break;
-
-                case 'delete_cart_token' :
-                    if(!CSRF::verifyToken($data[$key],'delete_cart_item')) die ('Nice Try');
-                    break;
-
-                case 'increase_cart_token' :
-                    if(!CSRF::verifyToken($data[$key],'increase_cart_item')) die ('Nice Try');
-                    break;
-
-                case 'decrease_cart_token' :
-                    if(!CSRF::verifyToken($data[$key],'decrease_cart_item')) die ('Nice Try');
-                    break;
-
                 case 'checkout_form_csrf_token' :
                     if(!CSRF::verifyToken($data[$key],'checkout_form')) die ('Nice Try');
                     break;
-                     // Veri important harr xD (ok !)             ^ liddat code more clean not meh
+                
                 case 'update_orderstatus_token' :
                     if(!CSRF::verifyToken($data[$key],'update_orderstatus')) die ('Nice Try');
                     break;

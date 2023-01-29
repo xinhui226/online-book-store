@@ -18,7 +18,6 @@ $description=$_POST['description'];
  $_SESSION['error'] = FormValidation::validation(
    $_POST,
        [
-           'bookname'=>'text',
            'price'=>'numeric',
            'authorname'=>'required',
            'description'=>'required',

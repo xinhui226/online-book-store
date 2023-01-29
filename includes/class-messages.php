@@ -13,10 +13,10 @@ class Messages{
     }
 
      //quantity of status (pending)'s message
-     public static function newMessage()
+     public static function allMessage()
      {
         //fetch
-         return DB::connect()->select('SELECT COUNT(id) AS quantity FROM messages WHERE replied = "PENDING"');
+         return DB::connect()->select('SELECT COUNT(id) AS quantity FROM messages');
      } 
 
 
@@ -40,7 +40,7 @@ class Messages{
     public static function search($message)
     {
         return DB::connect()->select(
-            'SELECT * FROM messages WHERE CONCAT(id,name,email,content,replied,created_at) LIKE "%'.$message.'%"',
+            'SELECT * FROM messages WHERE CONCAT(id,name,email,content,created_at) LIKE "%'.$message.'%"',
             [],
             true
             );
@@ -60,21 +60,4 @@ class Messages{
         
             // return 'Successfully delete message!';
     }
-
-
-    //update message
-    public static function updateMessage($id,$status)
-    {
-
-        return DB::connect()->update(
-        'UPDATE messages SET replied = :status WHERE id = :id',
-             [
-            'status'=>$status,
-            'id'=>$id
-             ]
-        );
-    
-        // return 'Successfully update Message #'.$id.' status to "'.$status.'" !';
-    }
-
 }

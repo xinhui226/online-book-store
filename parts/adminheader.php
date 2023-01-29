@@ -43,6 +43,7 @@
     <div class="brandcontainer mt-lg-4 ps-lg-3">
       <a class="text-decoration-none" href="/dashboard"><h2 class="colorxtradark">Book Store</h2></a>
       <h5 class="colorxtradark">Hi, <?=$_SESSION['user']['username']?> ! <span class="fs-6">(<?=$_SESSION['user']['role']?>)</span></h5>
+      <a href="/" class="btn bgdark rounded">View as Guest</a>
     </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
