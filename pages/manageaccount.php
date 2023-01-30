@@ -160,15 +160,15 @@ require dirname(__DIR__)."/parts/adminheader.php";
             <?php modalFooter('view'); ?>
             <!--end viewmodal-->
 
-            <?php if($user['role']!=='admin'):?>
             
             <a href="/manageaccount-edit?id=<?=$user['id']?>" class="btn btn-sm">
-            <i class="bi bi-pencil-square"></i>
+                <i class="bi bi-pencil-square"></i>
             </a>
-
+            
             <!--deletemodal-->
+            <?php if($user['id']!==$_SESSION['user']['id']):?>
             <?php modalButton('delete',$user['id'],'btn-sm') ?>
-            <?php endif; ?> <!-- end - if($user['role']!='admin)-->
+            <?php endif; ?> <!-- end - if($user['id']!==$_SESSION['user']['id'])-->
                 <form 
                 action="<?= $_SERVER['REQUEST_URI'];?>" 
                 method="POST">
