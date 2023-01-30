@@ -91,7 +91,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
                     <div class="text-center">
                     <form action="<?=$_SERVER['REQUEST_URI']?>" method="POST">
                     <select class="form-select form-select-md colordark" id="deliver<?=$order['id']?>" name="orderstatus">
-                        <option value="Pending" <?=($order['order_status']=='Pending'?'selected' : '')?>>Pending</option>
+                        <option value="Pending" <?=($order['order_status']=='Pending'?'selected' : '')?>>Paid</option>
                         <option value="Out of delivery" <?=($order['order_status']=='Out of delivery'?'selected' : '')?>>Out Of Delivery</option>
                         <option value="Delivered" <?=($order['order_status']=='Delivered'?'selected' : '')?>>Delivered</option>
                     </select>
