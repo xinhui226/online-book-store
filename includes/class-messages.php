@@ -23,8 +23,7 @@ class Messages{
     //send message
     public static function sendMessage($name,$email,$text)
     {
-
-       return DB::connect()->insert(
+        DB::connect()->insert(
             'INSERT INTO messages (name,email,content) VALUES (:name,:email,:content)',
             [
                 'name'=>$name,
@@ -33,7 +32,26 @@ class Messages{
             ]
         );
 
-        // return 'We will get right back to you !';
+        $curl = curl_init();
+            curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($curl, CURLOPT_USERPWD, 'api:'.MAILGUN_API_KEY);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+            curl_setopt($curl, CURLOPT_URL,MAILGUN_API_URL);
+            curl_setopt($curl, CURLOPT_POSTFIELDS,
+                array('from' => $name.' <'.$email.'>',
+                      'to' => 'name <'.MAILGUN_RECEIVER.'>',
+                      'subject' => 'New Message to Online Book Store',
+                      'text' => $text ));
+            $response = curl_exec($curl);
+            $error = curl_error($curl);
+            curl_close($curl);
+
+            if($error)
+            die ('API not working');
+
+            return json_decode($response);
+
     }
 
     //search

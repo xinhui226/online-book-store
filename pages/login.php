@@ -1,6 +1,6 @@
 <?php
 
-  if(Authentication::whoCanAccess('editor'))
+  if(Authentication::isEditor()||Authentication::isAdmin())
   {
       header('Location: /dashboard');
       exit;
@@ -44,14 +44,13 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     $_SESSION['message'] = 'Welcome Back, '.$_SESSION['user']['username'].' !';;
     if(Authentication::isUser())
     {
-        
         header('Location: /');
         exit;
-      }elseif(Authentication::whoCanAccess('editor')){
+      }elseif(Authentication::isEditor()||Authentication::isAdmin()){
         header('Location: /dashboard');
         exit;
       }
-   }//end - else 
+   }//end - if !$userid 
 
   }// end - if !$error
 };

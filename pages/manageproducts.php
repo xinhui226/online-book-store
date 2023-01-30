@@ -22,13 +22,20 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
       if(empty($_SESSION['error']))
       {
-          Products::deleteProduct($_POST['productid']);
 
-          CSRF::removeToken('delete_product');
+            if(PivotOrderPro::productBeenOrdered($_POST['productid'])){
+                $_SESSION['error']='Product is not allowed to be deleted !';
+            }  
+            else{
+                Products::deleteProduct($_POST['productid']);
+    
+                CSRF::removeToken('delete_product');
+    
+                $_SESSION['message']='Successfully delete Product "'.$_POST['product'].'" !';
+                header('Location: /manageproducts');
+                exit;
+            }// end - if empty PivotOrderPro::getProductByOrder()
 
-          $_SESSION['message']='Successfully delete Product "'.$_POST['product'].'" !';
-          header('Location: /manageproducts');
-          exit;
       }//end - empty($_SESSION['error'])
 
     } //if(!isset($_POST['search']))

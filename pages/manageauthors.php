@@ -34,6 +34,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
                  exit;
                 }//end - !$_SESSION['error']
                  break;
+
             case 'delete' :
                 $_SESSION['error'] = FormValidation::validation
                  ( 
@@ -45,14 +46,21 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
                 );
                    if(!$_SESSION['error'])
                    {
-                 Authors::deleteAuthor($_POST['authorid']);
-                 
-                 CSRF::removeToken('delete_author');
-                 
-                 $_SESSION['message']='Successfully delete Author "'.$_POST['author'].'" !';
-                 header('Location: /manageauthors');
-                 exit;
-                }//end - !$_SESSION['error']
+
+                        if(empty(Products::getProductByAuthor($_POST['authorid']))){
+                            Authors::deleteAuthor($_POST['authorid']);
+                            
+                            CSRF::removeToken('delete_author');
+                            
+                            $_SESSION['message']='Successfully delete Author "'.$_POST['author'].'" !';
+                            header('Location: /manageauthors');
+                            exit;
+                        }else
+                        {
+                            $_SESSION['error'] = 'Author is not allowed to be deleted !';
+                        }// end - if empty(Products::getProductByAuthor())
+
+                    }//end - !$_SESSION['error']
                   break;
        }  //end - switch
     } //end - isset($_POST['action'])
@@ -135,7 +143,6 @@ require dirname(__DIR__)."/parts/adminheader.php";
                             <!--deletemodal-->
                             <?php modalHeader('delete',$author['id'],'Author "'.$author['name'].'"'); ?>
                             <h4 class="fw-light">Are you confirm to delete Author "<?=$author['name'];?>" ? (ID : <?=$author['id']?>)</h4>
-                            <small class="text-danger">Warning : The books written by the author will be deleted !</small>
                                 <input type="hidden" name="authorid" value="<?=$author['id']?>">
                                 <input type="hidden" name="author" value="<?=$author['name']?>">
                                 <input type="hidden" name="action" value="delete">
@@ -169,7 +176,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
     <?php foreach(Authors::listAllAuthor() as $index=> $author) : ?>
     <tr>
         <td><?=$index+1?></td>
-        <td><a class="colorxtradark" href="/authorproduct?id=<?=$author['id']?>"><?=$author['name']?></a></td>
+        <td><a class="colorxtradark" href="/author_product?id=<?=$author['id']?>"><?=$author['name']?></a></td>
         <td><?=$author['created_at']?></td>
         <td class="d-flex align-items-center justify-content-end">
             <a
@@ -186,7 +193,6 @@ require dirname(__DIR__)."/parts/adminheader.php";
                 <!--deletemodal-->
                 <?php modalHeader('delete',$author['id'],'Author "'.$author['name'].'"'); ?>
                 <h4 class="fw-light">Are you confirm to delete Author "<?=$author['name'];?>" ? (ID : <?=$author['id']?>)</h4>
-                <small class="text-danger">Warning : The books written by the author will be deleted !</small>
                     <input type="hidden" name="authorid" value="<?=$author['id']?>">
                     <input type="hidden" name="author" value="<?=$author['name']?>">
                     <input type="hidden" name="action" value="delete">

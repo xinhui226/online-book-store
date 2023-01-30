@@ -29,7 +29,7 @@
                 
                 <p>Name : <?=$message['name']?></p>
                 <p>Email : <?=$message['email']?></p>
-                <p>Message : <?=$message['content']?></p>
+                <p>Message : <br><?=nl2br($message['content'])?></p>
                 <p>Date : <?=$message['created_at']?></p>
                 
                 <?php modalFooter('view'); ?>

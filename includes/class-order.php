@@ -94,6 +94,23 @@ class PivotOrderPro
 
         return $products;
     }
+    
+    // check product exist in order history
+    public static function productBeenOrdered($productid)
+    {
+       $products = DB::connect()->select(
+            'SELECT * FROM orders_products WHERE product_id = :id',
+            [
+                'id'=>$productid
+            ],
+            true
+            );
+        
+        if($products)
+            return true;
+
+        return false;
+    }
 
     public static function insert($product,$orderid,$quantity)
     {

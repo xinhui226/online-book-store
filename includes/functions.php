@@ -63,9 +63,10 @@ function callAPI($api_url='',$method='GET',$formdata=[],$headers=[])
             $curl_props[CURLOPT_POSTFIELDS] = json_encode($formdata);
         }
 
-    if ( !empty( $headers ) ) {
-        $curl_props[ CURLOPT_HTTPHEADER ] = $headers;
-    }
+        if ( !empty( $headers ) ) {
+            $curl_props[ CURLOPT_HTTPHEADER ] = $headers;
+        }
+
 
         curl_setopt_array($curl,$curl_props);
 

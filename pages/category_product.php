@@ -1,5 +1,11 @@
 <?php
 
+if(!Authentication::whoCanAccess('editor'))
+{
+     header('Location: /');
+     exit;
+}
+
 $category = $_GET['id'];
 
 require dirname(__DIR__)."/parts/adminheader.php"
