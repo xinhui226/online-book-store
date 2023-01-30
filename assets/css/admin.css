@@ -152,7 +152,7 @@
 
   .dash{
     position: absolute;
-    color: var(--light);
+    color: var(--dark);
     font-size: 35px;
     top: -25px;
     left: 15px;

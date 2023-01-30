@@ -63,7 +63,7 @@ if(Authentication::isEditor()||Authentication::isAdmin())
               Cart::addToCart($_POST['productid']);
 
               $_SESSION['message'] = 'Successfully added Product "'.$_POST['name'].'" to cart !';
-              header('Location: /products');
+              header('Location: /cart');
               exit;
               
             }
