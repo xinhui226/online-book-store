@@ -7,7 +7,7 @@ class Category{
     {
         //fetchall
         return DB::connect()->select(
-            'SELECT * FROM categories ORDER BY id',
+            'SELECT * FROM categories ORDER BY id DESC',
             [],
             true);
     }

@@ -7,7 +7,7 @@ class Authors{
     {
         //fetchall
        return DB::connect()->select(
-            'SELECT * FROM authors ORDER BY id',
+            'SELECT * FROM authors ORDER BY id DESC',
             [],
             true);
     }
