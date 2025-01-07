@@ -221,21 +221,20 @@ require dirname(__DIR__)."/parts/header.php";
                             />
                           </div>
                           <div class="mb-3">
-                            <label for="phone" class="form-label">Phone Number</label>
+                            <label for="phonenumber" class="form-label">Phone Number</label>
                             <div class="input-group">
-                            <input 
-                            type="text" 
-                            class="form-control" 
-                            placeholder="012"
-                            id="phone"
-                            name="phoneno"
-                            aria-label="phoneno">
-                            <span class="input-group-text">-</span>
-                            <input type="text" 
-                            class="form-control"
-                            name="phonenumber"
-                            placeholder="3456789"
-                            aria-label="phonenumber">
+                              <input 
+                              type="text" 
+                              class="form-control" 
+                              value="+60"
+                              disabled="true"
+                              aria-label="phoneno">
+                              <span class="input-group-text">-</span>
+                              <input type="text" 
+                              class="form-control"
+                              name="phonenumber"
+                              placeholder="123456789"
+                              aria-label="phonenumber">
                             </div>
                           </div>
                           <div class="mb-3">

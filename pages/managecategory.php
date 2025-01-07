@@ -139,7 +139,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
                 <tr>
                     <td><?=$index+1?></td>
                     <td><a class="colorxtradark text-decoration-none" href="/category_product?id=<?=$category['id']?>"><?=$category['name']?></a></td>
-                    <td><?=$category['created_at']?></td>
+                    <td><?=tzFormat($category['created_at'])?></td>
                     <td class="d-flex align-items-center justify-content-end">
                     <a
                             href="/managecategory-edit?id=<?=$category['id']?>"
@@ -190,7 +190,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
     <tr>
         <td><?=$index+1?></td>
         <td><a class="colorxtradark text-decoration-none" href="/category_product?id=<?=$category['id']?>"><?=$category['name']?></a></td>
-        <td><?=$category['created_at']?></td>
+        <td><?=tzFormat($category['created_at'])?></td>
         <td class="d-flex align-items-center justify-content-end">
         <a
                 href="/managecategory-edit?id=<?=$category['id']?>"

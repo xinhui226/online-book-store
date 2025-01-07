@@ -94,7 +94,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
                         <th scope="row"><?=$index+1?></th>
                         <td><?=Users::getUserById($order['user_id'])['username']?></td>
                         <td>RM <?=$order['total_amount']?></td>
-                        <td><?=$order['created_at']?></td>
+                        <td><?= tzFormat($order['created_at']) ?></td>
                         <td><?=$order['payment_status']?></td>
                         <td><?=($order['payment_status']=='Failed'?'---':$order['order_status'])?></td>
                         </tr>
@@ -115,7 +115,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
                 <?php foreach(Users::getAllUsers(10) as $index=> $user):?>
                 <li class="list-group-item colordark">
                     <div><?=($index+1).'. '.$user['username'].' ( '.$user['role'].' ) '?></div>
-                    <small class="d-block text-end colorneutral">ceated at :<?=$user['created_at']?></small>
+                    <small class="d-block text-end colorneutral">created at :<?= tzFormat($user['created_at']) ?></small>
                 </li>
                 <?php endforeach; ?>
             </ul>

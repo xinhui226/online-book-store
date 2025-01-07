@@ -4,6 +4,8 @@ class Checkout
 {
     public static function proceedPayment($order_id,$total_amount)
     {
+        $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
+
         return callAPI(
             BILLPLZ_API_URL.'v3/bills',
             'POST',
@@ -12,9 +14,9 @@ class Checkout
                 'email' => $_SESSION['user']['email'],
                 'name' => $_SESSION['user']['username'],
                 'amount' => $total_amount*100,
-                'callback_url' => 'http://online-book-store.local:52089/payment-callback',
+                'callback_url' => $baseUrl . '/payment-callback',
                 'description' => 'Order #'.$order_id,
-                'redirect_url' => 'http://online-book-store.local:52089/payment-verification'
+                'redirect_url' => $baseUrl . '/payment-verification'
             ],
             [
                 'Content-Type: application/json',

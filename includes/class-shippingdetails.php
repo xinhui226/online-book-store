@@ -13,7 +13,7 @@ class Shipment{
         );
     }
 
-    //insert user address deltails
+    //insert user address details
     public static function insert($name,$phone,$address,$postcode,$state,$city,$orderid)
     {
 

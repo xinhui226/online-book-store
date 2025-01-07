@@ -78,10 +78,10 @@ require dirname(__DIR__)."/parts/adminheader.php";
                 <!--end - view user detail modal -->
 
                 <p>Amount : RM<?=$order['total_amount']?></p>
-                <p>Placed on : <?=$order['created_at']?></p>
+                <p>Placed on : <?=tzFormat($order['created_at'])?></p>
                 <p <?=$order['payment_status']=='Failed'?'class="fw-semibold"' :''?>>Payment Status : <?=$order['payment_status']?></p>
                 <p>Payment Method : <?=Checkout::checkPaymentDetails($order['transaction_id'])->payment_channel?></p>
-                <p>Paid at : <?=Checkout::checkPaymentDetails($order['transaction_id'])->completed_at?></p>
+                <p>Paid at : <?=tzFormat(Checkout::checkPaymentDetails($order['transaction_id'])->completed_at, false)?></p>
                 <label 
                 for="deliver<?=$order['id']?>" 
                 class="form-label">
@@ -113,7 +113,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
 
                 <p>User : <?=$order['user_id']?></p>
                 <p>Amount :RM <?=$order['total_amount']?></p>
-                <p>Placed on : <?=$order['created_at']?></p>
+                <p>Placed on : <?=tzFormat($order['created_at'])?></p>
                 <p <?=$order['payment_status']=='Failed'?'class="fw-semibold"' :''?>>Payment Status : <?=$order['payment_status']?></p>
                 <hr>
                 <div class="row">

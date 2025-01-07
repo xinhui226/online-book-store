@@ -11,8 +11,7 @@ require dirname(__DIR__)."/parts/header.php";
 ?>
 <body class="bglight">
         <div 
-        class="container mt-5 mb-2 mx-auto" 
-        style="max-width: 900px;">
+        class="container mt-5 mb-2 mx-auto">
         <a href="/" class="colordark"><?= $_SESSION['left-arrow']; ?> Home</a>
         <h1 class="colordark mt-4">My Orders</h1>
 
@@ -65,7 +64,6 @@ require dirname(__DIR__)."/parts/header.php";
      
             <div class="row">
             <?php foreach(Order::getOrderByUser($_SESSION['user']['id']) as $order) :?>
-
         <div class="col-lg-4 col-sm-6 mb-3">
         <div class="card rounded border-0 h-100 <?=$order['payment_status']=='Failed'?'paymentfail' :'colordark'?>">
             <div class="card-title border-bottom py-2 text-end pe-1">
@@ -75,10 +73,11 @@ require dirname(__DIR__)."/parts/header.php";
             <div class="card-body">
 
                 <p>Amount : RM<?=$order['total_amount']?></p>
-                <p>Placed on : <?=$order['created_at']?></p>
+                <p>Placed on: <?= tzFormat($order['created_at']) ?></p>
+                <p>Status: <?= $order['order_status'] ?></p>
                 <p <?=$order['payment_status']=='Failed'?'class="fw-semibold"' :''?>>Payment Status : <?=$order['payment_status']?></p>
                 <p>Payment Method : <?=Checkout::checkPaymentDetails($order['transaction_id'])->payment_channel?></p>
-                <p>Paid at : <?=Checkout::checkPaymentDetails($order['transaction_id'])->completed_at?></p>
+                <p>Paid at : <?=tzFormat(Checkout::checkPaymentDetails($order['transaction_id'])->completed_at, false)?></p>
                 
             </div> <!--card-body -->
 
@@ -109,7 +108,8 @@ require dirname(__DIR__)."/parts/header.php";
 
                 <div class="text-end">
                 <p>Total Amount :RM <?=$order['total_amount']?></p>
-                <p>Placed on : <?=$order['created_at']?></p>
+                <p>Placed on : <?= tzFormat($order['created_at']) ?></p>
+                <p>Status: <?= $order['order_status'] ?></p>
                 <p>Payment Method : <?=Checkout::checkPaymentDetails($order['transaction_id'])->payment_channel?></p>
                 </div> <!--text-end-->
                 <hr>
