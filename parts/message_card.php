@@ -20,7 +20,7 @@
                 <div class="card-body">
                     <p>Name : <?=$message['name']?></p>
                     <p>Email : <?=$message['email']?></p>
-                    <p>Date : <?=$message['created_at']?></p>
+                    <p>Date : <?=tzFormat($message['created_at'])?></p>
                 </div> <!--card-body-->
                 
                 <?php modalButton('view',$message['id'],'btn-md bglight colorxtradark','View') ?>
@@ -30,7 +30,7 @@
                 <p>Name : <?=$message['name']?></p>
                 <p>Email : <?=$message['email']?></p>
                 <p>Message : <br><?=nl2br($message['content'])?></p>
-                <p>Date : <?=$message['created_at']?></p>
+                <p>Date : <?=tzFormat($message['created_at'])?></p>
                 
                 <?php modalFooter('view'); ?>
                 <!--end viewmodal-->

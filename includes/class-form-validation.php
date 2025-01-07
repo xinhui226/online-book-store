@@ -81,7 +81,7 @@ class FormValidation
 
                 case 'phone' :
                     if(empty($data[$key])) $error.= 'The field "'.$key.'" is empty<br>';
-                    elseif (!preg_match('/[0][1][0-9]/', $data[$key])) $error .= 'Invalid phone number format. <br>';  
+                    elseif (!preg_match('/^\d{9,10}$/', $data[$key])) $error .= 'Invalid phone number format. <br>';  
                     break;
 
                 case 'password_check' :

@@ -17,7 +17,7 @@
                 <h5 class="my-3 fw-semibold">Book Name : <?=$product['name'].($product['trending']==1?'<i class="bi bi-fire colorxtradark"></i>':'')?></h5>
                 <h6><span class="fw-semibold">Author : </span><?=$product['authorname']?></h6>
                 <p><span class="fw-semibold">Price :</span> Rm<?=$product['price'];?></p>
-                <p><span class="fw-semibold">Uploaded on :</span> <?=$product['created_at'];?></p>
+                <p><span class="fw-semibold">Uploaded on :</span> <?=tzFormat($product['created_at']);?></p>
                 <h4 class="mt-5 fw-semibold">Description :</h4>
                 <p><?=nl2br($product['description']);?></p>
               </div> <!--col-lg-6-->

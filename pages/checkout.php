@@ -24,8 +24,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
           'state'=>'required',
           'city'=>'required',
           'postcode'=>'numeric',
-          'phoneno'=>'phone',
-          'phonenumber'=>'numeric',
+          'phonenumber'=>'phone',
           'csrf_token'=>'checkout_form_csrf_token'
           ]
         );
@@ -42,7 +41,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
    
         Shipment::insert(
             $_POST['name'],
-            $_POST['phoneno'].'-'.$_POST['phonenumber'],
+            '(+60)'.$_POST['phonenumber'],
             $_POST['address'],
             $_POST['postcode'],
             $_POST['state'],

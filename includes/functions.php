@@ -81,3 +81,13 @@ function callAPI($api_url='',$method='GET',$formdata=[],$headers=[])
 
         return json_decode($response);
     }
+
+function tzFormat($timestamp, $isDBTimestamp=true) {
+  $date = new DateTime($timestamp, new DateTimeZone('UTC'));
+
+  if ($isDBTimestamp) $date->modify('+8 hours');
+
+  $date->setTimezone(new DateTimeZone('Asia/Kuala_Lumpur'));
+
+  return $date->format('Y-m-d H:i:s');
+}

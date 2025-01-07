@@ -127,7 +127,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
                 <tr>
                     <td><?=$index+1?></td>
                     <td><a class="colorxtradark text-decoration-none" href="/author_product?id=<?=$author['id']?>"><?=$author['name']?></a></td>
-                    <td><?=$author['created_at']?></td>
+                    <td><?=tzFormat($author['created_at'])?></td>
                     <td class="d-flex align-items-center justify-content-end">
                         <a
                             href="/manageauthors-edit?id=<?=$author['id']?>"
@@ -177,7 +177,7 @@ require dirname(__DIR__)."/parts/adminheader.php";
     <tr>
         <td><?=$index+1?></td>
         <td><a class="colorxtradark" href="/author_product?id=<?=$author['id']?>"><?=$author['name']?></a></td>
-        <td><?=$author['created_at']?></td>
+        <td><?=tzFormat($author['created_at'])?></td>
         <td class="d-flex align-items-center justify-content-end">
             <a
                 href="/manageauthors-edit?id=<?=$author['id']?>"
